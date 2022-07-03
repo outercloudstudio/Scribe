@@ -1,4 +1,4 @@
-package net.fabricmc.scribe;
+package com.outercloud.scribe;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
