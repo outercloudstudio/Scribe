@@ -8,5 +8,6 @@ public class Scribe {
 
 	public void Debug() {
 		LOGGER.info("Hello Fabric world!");
+		LOGGER.info("Hello Fabric world! 2");
 	}
 }
