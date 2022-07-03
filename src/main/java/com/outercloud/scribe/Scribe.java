@@ -14,14 +14,15 @@ import net.minecraft.util.registry.Registry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Hashtable;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Scribe implements ModInitializer, ClientModInitializer {
 	private static final String NAMESPACE = "scribe";
 
 	private static final Logger LOGGER = LoggerFactory.getLogger("scribe");
 
-	public static final DefaultParticleType PARTICLE = FabricParticleTypes.simple();
+	private static Map<String, DefaultParticleType> particles = new HashMap<String, DefaultParticleType>();
 
 	@Override
 	public void onInitialize() {
@@ -33,8 +34,18 @@ public class Scribe implements ModInitializer, ClientModInitializer {
 		LOGGER.info("Initializing Client Scribe!");
 	}
 
+	private static void InitializeParticleOptions(Identifier identifier){
+		particles.put(identifier.toString(), FabricParticleTypes.simple());
+	}
+
+	public static DefaultParticleType Particle(Identifier identifier){
+		return particles.get(identifier);
+	}
+
 	public static void InitializeParticle(Identifier identifier){
-		Registry.register(Registry.PARTICLE_TYPE, identifier, PARTICLE);
+		InitializeParticleOptions(identifier);
+
+		Registry.register(Registry.PARTICLE_TYPE, identifier, Particle(identifier));
 	}
 
 	public static void InitializeParticleClient(Identifier identifier,  ParticleFactoryRegistry.PendingParticleFactory factory){
@@ -42,6 +53,6 @@ public class Scribe implements ModInitializer, ClientModInitializer {
 			registry.register(new Identifier(identifier.getNamespace(), "particle/" + identifier.getPath()));
 		}));
 
-		ParticleFactoryRegistry.getInstance().register(PARTICLE, factory);
+		ParticleFactoryRegistry.getInstance().register(Particle(identifier), factory);
 	}
 }
