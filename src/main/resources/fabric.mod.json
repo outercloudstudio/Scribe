@@ -18,6 +18,15 @@
     "sources": "https://github.com/outercloudstudio/Scribe"
   },
 
+  "entrypoints": {
+    "main": [
+      "com.outercloud.scribe.Scribe"
+    ],
+    "client": [
+      "com.outercloud.scribe.Scribe"
+    ]
+  },
+
   "license": "CC0-1.0",
   "icon": "assets/scribe/icon.png",
 
