@@ -2,9 +2,8 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>br.com.softsite</groupId>
-	<artifactId>totalcross-functional-toolbox-reactor</artifactId>
-	<version>1.0.3</version>
+	<groupId>com.outercloud.scribe</groupId>
+	<version>1.0.0</version>
 	<packaging>pom</packaging>
 
 	<modules>
@@ -12,8 +11,7 @@
 		<module>gwt</module>
 	</modules>
 	
-	<properties>
-	    <maven.compiler.target>1.8</maven.compiler.target>
-	    <maven.compiler.source>1.8</maven.compiler.source>
-	</properties>
+	<configuration>
+	    <release>17</release>
+        </configuration>
 </project>
