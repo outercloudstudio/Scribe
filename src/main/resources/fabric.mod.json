@@ -18,7 +18,7 @@
     "sources": "https://github.com/outercloudstudio/Scribe"
   },
 
-  "license": "CC0-1.0",
+  "license": "MIT",
   "icon": "assets/scribe/icon.png",
 
   "environment": "*",

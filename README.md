@@ -1,9 +1,24 @@
-# Fabric Example Mod
+# Scribe
 
 ## Setup
 
-For setup instructions please see the [fabric wiki page](https://fabricmc.net/wiki/tutorial:setup) that relates to the IDE that you are using.
+To add scribe to your mod add the following to your build.grade:
+
+```
+allprojects {
+	repositories {
+		maven { url 'https://jitpack.io' }
+	}
+}
+
+dependencies {
+	[...] //Existing Dependencies
+
+	//Scribe
+	modImplementation 'com.github.outercloudstudio:Scribe:<Desired Scribe Commit ID>'
+}
+```
 
 ## License
 
-This template is available under the CC0 license. Feel free to learn from it and incorporate it in your own projects.
+This library is liscensed under the MIT liscense.
