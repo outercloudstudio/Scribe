@@ -5,13 +5,14 @@
 	<groupId>com.outercloud.scribe</groupId>
 	<version>1.0.0</version>
 	<packaging>pom</packaging>
+	<artifactId>scribe</artifactId>
 
 	<modules>
 		<module>default</module>
 		<module>gwt</module>
 	</modules>
 	
-	<configuration>
-	    <release>17</release>
-        </configuration>
+	<properties>
+	    <maven.compiler.release>17</maven.compiler.release>
+	</properties>
 </project>
