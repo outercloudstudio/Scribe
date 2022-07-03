@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+
+  "id": "scribe",
+
+  "version": "${version}",
+
+  "name": "Scribe",
+
+  "description": "This is an example description! Tell everyone what your mod is about!",
+
+  "authors": [
+    "Outer Cloud Studio"
+  ],
+
+  "contact": {
+    "homepage": "https://github.com/outercloudstudio/Scribe",
+    "sources": "https://github.com/outercloudstudio/Scribe"
+  },
+
+  "license": "CC0-1.0",
+  "icon": "assets/scribe/icon.png",
+
+  "environment": "*",
+
+  "depends": {
+    "fabricloader": ">=0.14.6",
+    "fabric": "*",
+    "minecraft": "~1.19",
+    "java": ">=17"
+  },
+
+  "custom": {
+    "modmenu:api": true
+  }
+}
