@@ -34,7 +34,13 @@ public class Scribe {
 
 	private static Map<String, Block> blocks = new HashMap<String, Block>();
 	private static Map<String, BlockEntityType<?>> blockEntities = new HashMap<String, BlockEntityType<?>>();
+	private static Map<String, Item> items = new HashMap<String, Item>();
 	private static Map<String, DefaultParticleType> particles = new HashMap<String, DefaultParticleType>();
+
+	//Items
+	public static Item GetItem(Identifier identifier){
+		return items.get(identifier.toString());
+	}
 
 	//Blocks
 	public static Block GetBlock(Identifier identifier){
@@ -56,7 +62,9 @@ public class Scribe {
 
 		Registry.register(Registry.BLOCK, identifier, GetBlock(identifier));
 
-		Registry.register(Registry.ITEM, identifier, new BlockItem(GetBlock(identifier), new Item.Settings().group(group)));
+		items.put(identifier.toString(), new BlockItem(GetBlock(identifier), new Item.Settings().group(group)));
+
+		Registry.register(Registry.ITEM, identifier, GetItem(identifier));
 	}
 
 	public static void RegisterBlockLayer(Identifier identifier, RenderLayer layer){
