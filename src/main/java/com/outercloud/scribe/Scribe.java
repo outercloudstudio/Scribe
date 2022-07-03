@@ -39,7 +39,7 @@ public class Scribe implements ModInitializer, ClientModInitializer {
 	}
 
 	public static DefaultParticleType Particle(Identifier identifier){
-		return particles.get(identifier);
+		return particles.get(identifier.toString());
 	}
 
 	public static void InitializeParticle(Identifier identifier){
