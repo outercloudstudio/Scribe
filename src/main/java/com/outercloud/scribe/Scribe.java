@@ -14,6 +14,9 @@ import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleFactory;
 import net.minecraft.client.render.RenderLayer;
+import net.minecraft.item.BlockItem;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.particle.DefaultParticleType;
 import net.minecraft.screen.PlayerScreenHandler;
 import net.minecraft.util.Identifier;
@@ -46,6 +49,14 @@ public class Scribe {
 		blocks.put(identifier.toString(), block);
 
 		Registry.register(Registry.BLOCK, identifier, GetBlock(identifier));
+	}
+
+	public static void RegisterBlockWithItem(Identifier identifier, Block block, ItemGroup group){
+		blocks.put(identifier.toString(), block);
+
+		Registry.register(Registry.BLOCK, identifier, GetBlock(identifier));
+
+		Registry.register(Registry.ITEM, identifier, new BlockItem(GetBlock(identifier), new Item.Settings().group(group)));
 	}
 
 	public static void RegisterBlockLayer(Identifier identifier, RenderLayer layer){
