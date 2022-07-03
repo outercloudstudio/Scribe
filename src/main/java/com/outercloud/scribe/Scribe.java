@@ -37,7 +37,7 @@ public class Scribe implements ModInitializer, ClientModInitializer {
 		Registry.register(Registry.PARTICLE_TYPE, identifier, PARTICLE);
 	}
 
-	public static void InitializeParticleClient(Identifier identifier, ParticleFactory factory){
+	public static void InitializeParticleClient(Identifier identifier, ParticleFactory<DefaultParticleType> factory){
 		ClientSpriteRegistryCallback.event(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE).register(((atlasTexture, registry) -> {
 			registry.register(new Identifier(identifier.getNamespace(), "particle/" + identifier.getPath()));
 		}));
