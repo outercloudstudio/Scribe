@@ -25,7 +25,7 @@ import org.slf4j.LoggerFactory;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Scribe implements ModInitializer {
+public class Scribe {
 	private static final String NAMESPACE = "scribe";
 
 	public static final Logger LOGGER = LoggerFactory.getLogger("scribe");
@@ -126,23 +126,5 @@ public class Scribe implements ModInitializer {
 		}));
 
 		ParticleFactoryRegistry.getInstance().register(GetParticle(identifier), factory);
-	}
-
-	@Override
-	public void onInitialize() {
-		LOGGER.info("HOI!");
-
-		Scribe.LoadConfig("config.json");
-
-		Scribe.config.DefaultEmptyGroup("spawn_rates");
-
-		Scribe.config.GetGroup("spawn_rates").Default("cruncher", 1);
-
-		Scribe.config.GetGroup("spawn_rates").Default("turtle", 2);
-
-		Scribe.config.DefaultEmptyArray("bans");
-
-		Scribe.config.GetArray("bans").Default(0, 0);
-		Scribe.config.GetArray("bans").Default(1, 1);
 	}
 }
