@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.outercloud.scribe.Scribe;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -27,15 +28,21 @@ public class Config {
                 return;
             }
 
+            Scribe.LOGGER.info("Got To File Exists!");
+
             Reader reader = Files.newBufferedReader(Paths.get("./config/" + relativePath));
 
             JsonObject json = JsonParser.parseReader(reader).getAsJsonObject();
 
             reader.close();
 
+            Scribe.LOGGER.info("Read JSON!");
+
             filePath = relativePath;
 
             masterGroup = new ConfigGroup(json, this);
+
+            Scribe.LOGGER.info("Created master group! " + filePath);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -91,5 +98,17 @@ public class Config {
 
     public void Remove(String key){
         masterGroup.Remove(key);
+    }
+
+    public void Default(String key, int value){
+        masterGroup.Default(key, value);
+    }
+
+    public void Default(String key, ConfigGroup value){
+        masterGroup.Default(key, value);
+    }
+
+    public void DefaultEmptyGroup(String key){
+        masterGroup.DefaultEmptyGroup(key);
     }
 }

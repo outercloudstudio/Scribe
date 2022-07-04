@@ -27,7 +27,7 @@ import java.util.Map;
 public class Scribe implements ModInitializer {
 	private static final String NAMESPACE = "scribe";
 
-	private static final Logger LOGGER = LoggerFactory.getLogger("scribe");
+	public static final Logger LOGGER = LoggerFactory.getLogger("scribe");
 
 	private static Map<String, Block> blocks = new HashMap<String, Block>();
 	private static Map<String, BlockEntityType<?>> blockEntities = new HashMap<String, BlockEntityType<?>>();
@@ -131,11 +131,11 @@ public class Scribe implements ModInitializer {
 	public void onInitialize() {
 		Scribe.LoadConfig("config.json");
 
-		if (!Scribe.config.HasKey("spawn_rates")) Scribe.config.UpdateEmptyGroup("spawn_rates");
+		Scribe.config.DefaultEmptyGroup("spawn_rates");
 
-		if (!Scribe.config.GetGroup("spawn_rates").HasKey("cruncher")) Scribe.config.GetGroup("spawn_rates").Update("cruncher", 1);
-		
-		if (!Scribe.config.GetGroup("spawn_rates").HasKey("turtle")) Scribe.config.GetGroup("spawn_rates").Update("turtle", 2);
+		Scribe.config.GetGroup("spawn_rates").Default("cruncher", 1);
+
+		Scribe.config.GetGroup("spawn_rates").Default("turtle", 2);
 
 		LOGGER.info("HOI!");
 	}

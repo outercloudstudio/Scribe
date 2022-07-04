@@ -1,5 +1,6 @@
 package com.outercloud.scribe.config;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import java.util.HashMap;
@@ -25,17 +26,17 @@ public class ConfigGroup {
     }
 
     private void Setup(JsonObject jsonObject){
-        Iterator<String> keys = (Iterator<String>)jsonObject.keySet();
+        Iterator<Map.Entry<String, JsonElement>> entries = jsonObject.entrySet().iterator();
 
-        while (keys.hasNext()){
-            String key = keys.next();
+        while (entries.hasNext()){
+            Map.Entry<String, JsonElement> entry = entries.next();
 
-            Object value = jsonObject.get(key);
+            JsonElement value = jsonObject.get(entry.getKey());
 
-            if(value instanceof JsonObject){
-                values.put(key, new ConfigValue(new ConfigGroup((JsonObject)value, this)));
-            } else if(value instanceof Number){
-                values.put(key, new ConfigValue((Number)value));
+            if(value.isJsonObject()){
+                values.put(entry.getKey(), new ConfigValue(new ConfigGroup(value.getAsJsonObject(), this)));
+            } else if(value.isJsonPrimitive() && value.getAsJsonPrimitive().isNumber()){
+                values.put(entry.getKey(), new ConfigValue(value.getAsNumber()));
             }
         }
     }
@@ -65,6 +66,30 @@ public class ConfigGroup {
         }else{
             values.put(key, new ConfigValue(value));
         }
+
+        Save();
+    }
+
+    public void Default(String key, int value){
+        if(HasKey(key)) return;
+
+        values.put(key, new ConfigValue(value));
+
+        Save();
+    }
+
+    public void Default(String key, ConfigGroup value){
+        if(HasKey(key)) return;
+
+        values.put(key, new ConfigValue(value));
+
+        Save();
+    }
+
+    public void DefaultEmptyGroup(String key){
+        if(HasKey(key)) return;
+
+        values.put(key, new ConfigValue(new ConfigGroup(null, this)));
 
         Save();
     }
