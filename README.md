@@ -2,7 +2,7 @@
 
 ## Setup
 
-To add scribe to your mod add the following to your build.grade:
+To add Scribe to your mod add the following to your build.grade:
 
 ```
 allprojects {
@@ -14,11 +14,14 @@ allprojects {
 dependencies {
 	[...] //Existing Dependencies
 
-	//Scribe, Replace 1.0.0 with desired version
-	modImplementation 'com.github.outercloudstudio:Scribe:1.0.0'
+	//Scribe, Replace 1.1.0 with desired version
+	modImplementation 'com.github.outercloudstudio:Scribe:1.1.0'
 }
 ```
 
+## How To Use
+Check the [Wiki](https://github.com/outercloudstudio/Scribe/wiki) for documentation and guides.
+
 ## License
 
-This library is liscensed under the MIT liscense.
+This library is licensed under the MIT license.
