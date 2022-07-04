@@ -14,8 +14,8 @@ allprojects {
 dependencies {
 	[...] //Existing Dependencies
 
-	//Scribe
-	modImplementation 'com.github.outercloudstudio:Scribe:<Desired Scribe Commit ID>'
+	//Scribe, Replace 1.0.0 with desired version
+	modImplementation 'com.github.outercloudstudio:Scribe:1.0.0'
 }
 ```
 
