@@ -53,4 +53,20 @@ public class Config {
             ex.printStackTrace();
         }
     }
+
+    public boolean HasKey(String key){
+        return masterGroup.HasKey(key);
+    }
+
+    public void Update(String key, int value){
+        masterGroup.Update(key, value);
+    }
+
+    public void Update(String key, ConfigGroup value){
+        masterGroup.Update(key, value);
+    }
+
+    public void Remove(String key){
+        masterGroup.Remove(key);
+    }
 }

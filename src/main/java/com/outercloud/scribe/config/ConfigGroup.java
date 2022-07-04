@@ -15,7 +15,7 @@ public class ConfigGroup {
     public ConfigGroup (JsonObject group, ConfigGroup parent){
         this.parent = parent;
 
-        Setup(group);
+        if(group != null) Setup(group);
     }
 
     public ConfigGroup (JsonObject group, Config parentConfig){
