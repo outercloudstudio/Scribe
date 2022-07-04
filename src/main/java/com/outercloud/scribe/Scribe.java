@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.outercloud.scribe.config.Config;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
@@ -45,31 +46,12 @@ public class Scribe {
 	private static Map<String, Item> items = new HashMap<String, Item>();
 	private static Map<String, DefaultParticleType> particles = new HashMap<String, DefaultParticleType>();
 
-	public static JsonObject config;
+	public static Config config;
 
 	//Config
-	public static JsonObject ReadConfig(String relativePath){
-		try {
-			Gson gson = new GsonBuilder().setPrettyPrinting().create();
-
-			if(!Files.exists(Paths.get("./config/" + relativePath))) return null;
-
-			Reader reader = Files.newBufferedReader(Paths.get("./config/" + relativePath));
-
-			JsonObject json = JsonParser.parseReader(reader).getAsJsonObject();
-
-			reader.close();
-
-			return json;
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-
-		return null;
-	}
-
 	public static void LoadConfig(String relativePath){
-		config = ReadConfig(relativePath);
+		config = new Config();
+		config.Load(relativePath);
 	}
 
 	//Items
