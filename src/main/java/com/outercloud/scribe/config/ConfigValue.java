@@ -3,16 +3,16 @@ package com.outercloud.scribe.config;
 public class ConfigValue {
     public static enum ValueType{
         UNKNOWN,
-        INT,
+        NUMBER,
         GROUP
     }
 
     public Object value;
     public ValueType valueType = ValueType.UNKNOWN;
 
-    public ConfigValue(int value){
+    public ConfigValue(Number value){
         this.value = value;
-        this.valueType = ValueType.INT;
+        this.valueType = ValueType.NUMBER;
     }
 
     public ConfigValue(ConfigGroup value){
@@ -20,10 +20,10 @@ public class ConfigValue {
         this.valueType = ValueType.GROUP;
     }
 
-    public int GetInt(){
-        if(valueType != ValueType.INT) return 0;
+    public Number GetNumber(){
+        if(valueType != ValueType.NUMBER) return 0;
 
-        return (int)value;
+        return (Number)value;
     }
 
     public ConfigGroup GetGroup(){

@@ -1,8 +1,6 @@
 package com.outercloud.scribe.config;
 
 import com.google.gson.JsonObject;
-import net.minecraft.item.Item;
-import netscape.javascript.JSObject;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -23,11 +21,11 @@ public class ConfigGroup {
     public ConfigGroup (JsonObject group, Config parentConfig){
         this.parentConfig = parentConfig;
 
-        Setup(group);
+        if(group != null) Setup(group);
     }
 
     private void Setup(JsonObject jsonObject){
-        Iterator<String> keys = (Iterator<String>) jsonObject.keySet();
+        Iterator<String> keys = (Iterator<String>)jsonObject.keySet();
 
         while (keys.hasNext()){
             String key = keys.next();
@@ -36,8 +34,8 @@ public class ConfigGroup {
 
             if(value instanceof JsonObject){
                 values.put(key, new ConfigValue(new ConfigGroup((JsonObject)value, this)));
-            } else if(value instanceof Integer){
-                values.put(key, new ConfigValue((int)value));
+            } else if(value instanceof Number){
+                values.put(key, new ConfigValue((Number)value));
             }
         }
     }
@@ -52,10 +50,50 @@ public class ConfigGroup {
     }
 
     public void Update(String key, int value){
-        if(!HasKey(key)) return;
-
-        values.replace(key, new ConfigValue(value));
+        if(HasKey(key)) {
+            values.replace(key, new ConfigValue(value));
+        }else{
+            values.put(key, new ConfigValue(value));
+        }
 
         Save();
+    }
+
+    public void Update(String key, ConfigGroup value){
+        if(HasKey(key)) {
+            values.replace(key, new ConfigValue(value));
+        }else{
+            values.put(key, new ConfigValue(value));
+        }
+
+        Save();
+    }
+
+    public void Remove(String key){
+        if(!HasKey(key)) return;
+
+        values.remove(key);
+
+        Save();
+    }
+
+    public JsonObject ToJson(){
+        JsonObject jsonObject = new JsonObject();
+
+        Iterator<String> keys = (Iterator<String>)values.keySet();
+
+        while (keys.hasNext()){
+            String key = keys.next();
+
+            ConfigValue value = values.get(key);
+
+            if (value.valueType == ConfigValue.ValueType.GROUP){
+                jsonObject.addProperty(key, value.GetNumber());
+            } else if (value.valueType == ConfigValue.ValueType.NUMBER) {
+                jsonObject.add(key, value.GetGroup().ToJson());
+            }
+        }
+
+        return jsonObject;
     }
 }
