@@ -80,17 +80,17 @@ public class ConfigGroup {
     public JsonObject ToJson(){
         JsonObject jsonObject = new JsonObject();
 
-        Iterator<String> keys = (Iterator<String>)values.keySet();
+        Iterator<Map.Entry<String, ConfigValue>> entries = values.entrySet().iterator();
 
-        while (keys.hasNext()){
-            String key = keys.next();
+        while (entries.hasNext()){
+            Map.Entry<String, ConfigValue> entry = entries.next();
 
-            ConfigValue value = values.get(key);
+            ConfigValue value = entry.getValue();
 
             if (value.valueType == ConfigValue.ValueType.GROUP){
-                jsonObject.addProperty(key, value.GetNumber());
+                jsonObject.addProperty(entry.getKey(), value.GetNumber());
             } else if (value.valueType == ConfigValue.ValueType.NUMBER) {
-                jsonObject.add(key, value.GetGroup().ToJson());
+                jsonObject.add(entry.getKey(), value.GetGroup().ToJson());
             }
         }
 
