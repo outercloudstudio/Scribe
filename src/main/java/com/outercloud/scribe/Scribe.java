@@ -1,5 +1,9 @@
 package com.outercloud.scribe;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
@@ -24,6 +28,10 @@ import net.minecraft.util.registry.Registry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
+import java.io.Reader;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,6 +44,33 @@ public class Scribe {
 	private static Map<String, BlockEntityType<?>> blockEntities = new HashMap<String, BlockEntityType<?>>();
 	private static Map<String, Item> items = new HashMap<String, Item>();
 	private static Map<String, DefaultParticleType> particles = new HashMap<String, DefaultParticleType>();
+
+	public static JsonObject config;
+
+	//Config
+	public static JsonObject ReadConfig(String relativePath){
+		try {
+			Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
+			if(!Files.exists(Paths.get("./config/" + relativePath))) return null;
+
+			Reader reader = Files.newBufferedReader(Paths.get("./config/" + relativePath));
+
+			JsonObject json = JsonParser.parseReader(reader).getAsJsonObject();
+
+			reader.close();
+
+			return json;
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+
+		return null;
+	}
+
+	public static void LoadConfig(String relativePath){
+		config = ReadConfig(relativePath);
+	}
 
 	//Items
 	public static Item GetItem(Identifier identifier){
