@@ -14,9 +14,13 @@ allprojects {
 dependencies {
 	[...] //Existing Dependencies
 
-	//Scribe, Replace 1.1.0 with desired version
-	modImplementation 'com.github.outercloudstudio:Scribe:1.1.0'
+	modImplementation "com.github.outercloudstudio:Scribe:${scribe_version}"
 }
+```
+
+Then in your gradle.properties add:
+```
+    scribe_version= //The desired scribe version
 ```
 
 ## How To Use
