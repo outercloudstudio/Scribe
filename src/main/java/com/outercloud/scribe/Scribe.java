@@ -51,13 +51,15 @@ public class Scribe {
 		return blockEntities.get(identifier.toString());
 	}
 
-	public static void RegisterBlock(Identifier identifier, Block block){
+	public static Block RegisterBlock(Identifier identifier, Block block){
 		blocks.put(identifier.toString(), block);
 
 		Registry.register(Registry.BLOCK, identifier, GetBlock(identifier));
+
+		return block;
 	}
 
-	public static void RegisterBlockWithItem(Identifier identifier, Block block, ItemGroup group){
+	public static Block RegisterBlockWithItem(Identifier identifier, Block block, ItemGroup group){
 		blocks.put(identifier.toString(), block);
 
 		Registry.register(Registry.BLOCK, identifier, GetBlock(identifier));
@@ -65,13 +67,25 @@ public class Scribe {
 		items.put(identifier.toString(), new BlockItem(GetBlock(identifier), new Item.Settings().group(group)));
 
 		Registry.register(Registry.ITEM, identifier, GetItem(identifier));
+
+		return block;
+	}
+
+	public static void RegisterBlockWithItem(Identifier identifier, Identifier itemIdentifier, Block block, ItemGroup group){
+		blocks.put(identifier.toString(), block);
+
+		Registry.register(Registry.BLOCK, identifier, GetBlock(identifier));
+
+		items.put(itemIdentifier.toString(), new BlockItem(GetBlock(identifier), new Item.Settings().group(group)));
+
+		Registry.register(Registry.ITEM, itemIdentifier, GetItem(itemIdentifier));
 	}
 
 	public static void RegisterBlockLayer(Identifier identifier, RenderLayer layer){
 		BlockRenderLayerMap.INSTANCE.putBlock(GetBlock(identifier), RenderLayer.getCutout());
 	}
 
-	public static void RegisterBlockEntity(Identifier identifier, FabricBlockEntityTypeBuilder.Factory blockEntity, Identifier ... blocks){
+	public static BlockEntityType<?> RegisterBlockEntity(Identifier identifier, FabricBlockEntityTypeBuilder.Factory blockEntity, Identifier ... blocks){
 		Block[] blockClasses = new Block[blocks.length];
 
 		for (int i = 0; i < blocks.length; i++) {
@@ -79,6 +93,8 @@ public class Scribe {
 		}
 
 		blockEntities.put(identifier.toString(), Registry.register(Registry.BLOCK_ENTITY_TYPE, identifier,  FabricBlockEntityTypeBuilder.create(blockEntity, blockClasses).build(null)));
+
+		return GetBlockEntity(identifier);
 	}
 
 	public static void RegisterOxidizablePair(Identifier from, Identifier to){
@@ -86,18 +102,16 @@ public class Scribe {
 	}
 
 	//Particles
-	private static void RegisterParticleOptions(Identifier identifier){
-		particles.put(identifier.toString(), FabricParticleTypes.simple());
-	}
-
 	public static DefaultParticleType GetParticle(Identifier identifier){
 		return particles.get(identifier.toString());
 	}
 
-	public static void RegisterParticle(Identifier identifier){
-		RegisterParticleOptions(identifier);
+	public static DefaultParticleType RegisterParticle(Identifier identifier){
+		particles.put(identifier.toString(), FabricParticleTypes.simple());
 
 		Registry.register(Registry.PARTICLE_TYPE, identifier, GetParticle(identifier));
+
+		return GetParticle(identifier);
 	}
 
 	public static void RegisterClientParticle(Identifier identifier,  ParticleFactoryRegistry.PendingParticleFactory factory){
