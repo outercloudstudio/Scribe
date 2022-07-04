@@ -73,6 +73,22 @@ public class Config {
         masterGroup.Update(key, value);
     }
 
+    public void UpdateEmptyGroup(String key){
+        masterGroup.UpdateEmtpyGroup(key);
+    }
+
+    public ConfigValue Get(String key){
+        return masterGroup.Get(key);
+    }
+
+    public Number GetNumber(String key){
+        return masterGroup.GetNumber(key);
+    }
+
+    public ConfigGroup GetGroup(String key){
+        return masterGroup.GetGroup(key);
+    }
+
     public void Remove(String key){
         masterGroup.Remove(key);
     }

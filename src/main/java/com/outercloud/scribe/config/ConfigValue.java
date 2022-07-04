@@ -20,13 +20,13 @@ public class ConfigValue {
         this.valueType = ValueType.GROUP;
     }
 
-    public Number GetNumber(){
+    public Number GetNumberValue(){
         if(valueType != ValueType.NUMBER) return 0;
 
         return (Number)value;
     }
 
-    public ConfigGroup GetGroup(){
+    public ConfigGroup GetGroupValue(){
         if(valueType != ValueType.GROUP) return null;
 
         return (ConfigGroup)value;

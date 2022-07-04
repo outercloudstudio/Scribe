@@ -1,12 +1,6 @@
 package com.outercloud.scribe;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.outercloud.scribe.config.Config;
-import com.outercloud.scribe.config.ConfigGroup;
-import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
@@ -15,10 +9,7 @@ import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityT
 import net.fabricmc.fabric.api.particle.v1.FabricParticleTypes;
 import net.fabricmc.fabric.api.registry.OxidizableBlocksRegistry;
 import net.minecraft.block.Block;
-import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.client.particle.Particle;
-import net.minecraft.client.particle.ParticleFactory;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
@@ -30,10 +21,6 @@ import net.minecraft.util.registry.Registry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
-import java.io.Reader;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -144,9 +131,11 @@ public class Scribe implements ModInitializer {
 	public void onInitialize() {
 		Scribe.LoadConfig("config.json");
 
-		if (!Scribe.config.HasKey("spawn_rates")) Scribe.config.Update("spawn_rates", new ConfigGroup(null, Scribe.config.masterGroup));
-		if (!Scribe.config.masterGroup.values.get("spawn_rates").GetGroup().HasKey("cruncher")) Scribe.config.masterGroup.values.get("spawn_rates").GetGroup().Update("cruncher", 1);
-		if (!Scribe.config.masterGroup.values.get("spawn_rates").GetGroup().HasKey("turtle")) Scribe.config.masterGroup.values.get("spawn_rates").GetGroup().Update("turtle", 2);
+		if (!Scribe.config.HasKey("spawn_rates")) Scribe.config.UpdateEmptyGroup("spawn_rates");
+
+		if (!Scribe.config.GetGroup("spawn_rates").HasKey("cruncher")) Scribe.config.GetGroup("spawn_rates").Update("cruncher", 1);
+		
+		if (!Scribe.config.GetGroup("spawn_rates").HasKey("turtle")) Scribe.config.GetGroup("spawn_rates").Update("turtle", 2);
 
 		LOGGER.info("HOI!");
 	}

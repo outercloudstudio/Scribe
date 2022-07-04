@@ -69,12 +69,40 @@ public class ConfigGroup {
         Save();
     }
 
+    public void UpdateEmtpyGroup(String key){
+        if(HasKey(key)) {
+            values.replace(key, new ConfigValue(new ConfigGroup(null, this)));
+        }else{
+            values.put(key, new ConfigValue(new ConfigGroup(null, this)));
+        }
+
+        Save();
+    }
+
     public void Remove(String key){
         if(!HasKey(key)) return;
 
         values.remove(key);
 
         Save();
+    }
+
+    public ConfigValue Get(String key){
+        if(!values.containsKey(key)) return null;
+
+        return values.get(key);
+    }
+
+    public Number GetNumber(String key){
+        if(!values.containsKey(key)) return 0;
+
+        return values.get(key).GetNumberValue();
+    }
+
+    public ConfigGroup GetGroup(String key){
+        if(!values.containsKey(key)) return null;
+
+        return values.get(key).GetGroupValue();
     }
 
     public JsonObject ToJson(){
@@ -88,9 +116,9 @@ public class ConfigGroup {
             ConfigValue value = entry.getValue();
 
             if (value.valueType == ConfigValue.ValueType.GROUP){
-                jsonObject.add(entry.getKey(), value.GetGroup().ToJson());
+                jsonObject.add(entry.getKey(), value.GetGroupValue().ToJson());
             } else if (value.valueType == ConfigValue.ValueType.NUMBER) {
-                jsonObject.addProperty(entry.getKey(), value.GetNumber());
+                jsonObject.addProperty(entry.getKey(), value.GetNumberValue());
             }
         }
 
