@@ -88,9 +88,9 @@ public class ConfigGroup {
             ConfigValue value = entry.getValue();
 
             if (value.valueType == ConfigValue.ValueType.GROUP){
-                jsonObject.addProperty(entry.getKey(), value.GetNumber());
-            } else if (value.valueType == ConfigValue.ValueType.NUMBER) {
                 jsonObject.add(entry.getKey(), value.GetGroup().ToJson());
+            } else if (value.valueType == ConfigValue.ValueType.NUMBER) {
+                jsonObject.addProperty(entry.getKey(), value.GetNumber());
             }
         }
 

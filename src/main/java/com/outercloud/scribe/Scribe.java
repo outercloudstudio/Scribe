@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.outercloud.scribe.config.Config;
+import com.outercloud.scribe.config.ConfigGroup;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
@@ -36,7 +37,7 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Scribe {
+public class Scribe implements ModInitializer {
 	private static final String NAMESPACE = "scribe";
 
 	private static final Logger LOGGER = LoggerFactory.getLogger("scribe");
@@ -137,5 +138,16 @@ public class Scribe {
 		}));
 
 		ParticleFactoryRegistry.getInstance().register(GetParticle(identifier), factory);
+	}
+
+	@Override
+	public void onInitialize() {
+		Scribe.LoadConfig("config.json");
+
+		if (!Scribe.config.HasKey("spawn_rates")) Scribe.config.Update("spawn_rates", new ConfigGroup(null, Scribe.config.masterGroup));
+		if (!Scribe.config.masterGroup.values.get("spawn_rates").GetGroup().HasKey("cruncher")) Scribe.config.masterGroup.values.get("spawn_rates").GetGroup().Update("cruncher", 1);
+		if (!Scribe.config.masterGroup.values.get("spawn_rates").GetGroup().HasKey("turtle")) Scribe.config.masterGroup.values.get("spawn_rates").GetGroup().Update("turtle", 2);
+
+		LOGGER.info("HOI!");
 	}
 }

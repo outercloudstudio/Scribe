@@ -32,5 +32,10 @@
 
   "custom": {
     "modmenu:api": true
+  },
+  "entrypoints": {
+    "main": [
+      "com.outercloud.scribe.Scribe"
+    ]
   }
 }

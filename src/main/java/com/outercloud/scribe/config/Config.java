@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.Reader;
 import java.nio.file.Files;
@@ -20,6 +21,8 @@ public class Config {
 
             if(!Files.exists(Paths.get("./config/" + relativePath))){
                 masterGroup = new ConfigGroup(null, this);
+
+                filePath = relativePath;
 
                 return;
             }
@@ -44,7 +47,11 @@ public class Config {
         JsonObject jsonObject = masterGroup.ToJson();
 
         try {
-            FileWriter fileWriter = new FileWriter(filePath);
+            if(!Files.exists(Paths.get("./config/" + filePath))){
+                new File("./config/" + filePath).createNewFile();
+            }
+
+            FileWriter fileWriter = new FileWriter("./config/" + filePath);
 
             fileWriter.write(gson.toJson(jsonObject));
 
