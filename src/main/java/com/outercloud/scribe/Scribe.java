@@ -18,6 +18,7 @@ import net.minecraft.particle.DefaultParticleType;
 import net.minecraft.screen.PlayerScreenHandler;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
+import org.apache.commons.logging.Log;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -129,6 +130,8 @@ public class Scribe implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
+		LOGGER.info("HOI!");
+
 		Scribe.LoadConfig("config.json");
 
 		Scribe.config.DefaultEmptyGroup("spawn_rates");
@@ -137,6 +140,9 @@ public class Scribe implements ModInitializer {
 
 		Scribe.config.GetGroup("spawn_rates").Default("turtle", 2);
 
-		LOGGER.info("HOI!");
+		Scribe.config.DefaultEmptyArray("bans");
+
+		Scribe.config.GetArray("bans").Default(0, 0);
+		Scribe.config.GetArray("bans").Default(1, 1);
 	}
 }

@@ -1,10 +1,16 @@
 package com.outercloud.scribe.config;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ConfigValue {
     public static enum ValueType{
         UNKNOWN,
         NUMBER,
-        GROUP
+        GROUP,
+        STRING,
+        BOOL,
+        ARRAY
     }
 
     public Object value;
@@ -17,7 +23,22 @@ public class ConfigValue {
 
     public ConfigValue(ConfigGroup value){
         this.value = value;
-        this.valueType = ValueType.GROUP;
+
+        if (value.isArray) {
+            this.valueType = ValueType.ARRAY;
+        }else {
+            this.valueType = ValueType.GROUP;
+        }
+    }
+
+    public ConfigValue(String value){
+        this.value = value;
+        this.valueType = ValueType.STRING;
+    }
+
+    public ConfigValue(Boolean value){
+        this.value = value;
+        this.valueType = ValueType.BOOL;
     }
 
     public Number GetNumberValue(){
@@ -30,5 +51,23 @@ public class ConfigValue {
         if(valueType != ValueType.GROUP) return null;
 
         return (ConfigGroup)value;
+    }
+
+    public String GetStringValue(){
+        if(valueType != ValueType.STRING) return "";
+
+        return (String)value;
+    }
+
+    public Boolean GetBoolValue(){
+        if(valueType != ValueType.BOOL) return false;
+
+        return (Boolean)value;
+    }
+
+    public ConfigGroup GetArrayValue(){
+        if(valueType != ValueType.ARRAY) return null;
+
+        return (ConfigGroup) value;
     }
 }
