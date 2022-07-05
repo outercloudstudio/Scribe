@@ -1,6 +1,6 @@
 # Scribe
 ## What Is Scribe?
-Scribe is a library meant to reduce code and simplify common things done in modding. At the moment this includes registering certing features and using a config.
+Scribe is a library meant to reduce code and simplify common things done in modding. At the moment this includes registering certain features and using a config.
 
 ## Setup
 
