@@ -64,7 +64,7 @@ public class Scribe implements ClientModInitializer {
 				Executor prepareExecutor,
 				Executor applyExecutor
 			) {
-				return DataCache.getInstance().reload(synchronizer, manager, prepareProfiler,
+				return DataCache.reload(synchronizer, manager, prepareProfiler,
 					applyProfiler, prepareExecutor, applyExecutor);
 			}
 		});

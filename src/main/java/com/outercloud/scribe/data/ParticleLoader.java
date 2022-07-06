@@ -1,5 +1,8 @@
 package com.outercloud.scribe.data;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonParser;
 import com.outercloud.scribe.Scribe;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
@@ -8,12 +11,10 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
 public class ParticleLoader {
-    public DataDrivenParticle load(ResourceManager resourceManager, Identifier identifier) {
+    public static DataDrivenParticle load(ResourceManager resourceManager, Identifier identifier) {
         Scribe.LOGGER.info("Loading particle! " + identifier.getPath());
 
-        getResourceAsString(identifier, resourceManager);
-
-        return new DataDrivenParticle();
+        return new DataDrivenParticle(JsonParser.parseString(getResourceAsString(identifier, resourceManager)));
     }
 
     public static String getResourceAsString(Identifier identifier, ResourceManager resourceManager) {

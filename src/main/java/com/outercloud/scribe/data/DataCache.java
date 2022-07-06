@@ -16,25 +16,9 @@ import net.minecraft.resource.ResourceReloader;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.profiler.Profiler;
 public class DataCache {
-    private Map<Identifier, DataDrivenParticle> particles = Collections.emptyMap();
-    private static DataCache INSTANCE;
-    private final ParticleLoader particleLoader;
+    public static Map<Identifier, DataDrivenParticle> particles = Collections.emptyMap();
 
-    public Map<Identifier, DataDrivenParticle> getParticles() {
-        return particles;
-    }
-
-    public DataCache() {
-        this.particleLoader = new ParticleLoader();
-    }
-
-    public static DataCache getInstance() {
-        if (INSTANCE == null) INSTANCE = new DataCache();
-
-        return INSTANCE;
-    }
-
-    public CompletableFuture<Void> reload(
+    public static CompletableFuture<Void> reload(
             ResourceReloader.Synchronizer stage,
             ResourceManager resourceManager,
             Profiler preparationsProfiler,
@@ -42,39 +26,39 @@ public class DataCache {
             Executor backgroundExecutor,
             Executor gameExecutor
     ) {
-        Map<Identifier, DataDrivenParticle> particles = new HashMap<>();
+        Map<Identifier, DataDrivenParticle> particlesLoaded = new HashMap<>();
 
         return CompletableFuture.allOf(
                 loadResources(
-                    backgroundExecutor,
-                    resourceManager,
-                    "data_driven_particle",
-                    resource -> particleLoader.load(resourceManager, resource),
-                    particles::put
+                        backgroundExecutor,
+                        resourceManager,
+                        "data_driven_particle",
+                        resource -> ParticleLoader.load(resourceManager, resource),
+                        particlesLoaded::put
                 )
         ).thenCompose(stage::whenPrepared).thenAcceptAsync(empty -> {
-            this.particles = particles;
+            particles = particlesLoaded;
         }, gameExecutor);
     }
 
     private static <T> CompletableFuture<Void> loadResources(
-        Executor executor,
-        ResourceManager resourceManager,
-        String type,
-        Function<Identifier, T> loader,
-        BiConsumer<Identifier, T> map
+            Executor executor,
+            ResourceManager resourceManager,
+            String type,
+            Function<Identifier, T> loader,
+            BiConsumer<Identifier, T> map
     ) {
         return CompletableFuture.supplyAsync(
-            () -> {
-                Scribe.LOGGER.info("Loading resources of type! " + type);
+                () -> {
+                    Scribe.LOGGER.info("Loading resources of type! " + type);
 
-                Map<Identifier, Resource> resources = resourceManager.findResources(type, fileName -> fileName.toString().endsWith(".json"));
+                    Map<Identifier, Resource> resources = resourceManager.findResources(type, fileName -> fileName.toString().endsWith(".json"));
 
-                Scribe.LOGGER.info("Done loading resources of type!");
+                    Scribe.LOGGER.info("Done loading resources of type!");
 
-                return resources;
-            },
-            executor
+                    return resources;
+                },
+                executor
         ).thenApplyAsync(resources -> {
             Map<Identifier, CompletableFuture<T>> tasks = new HashMap<>();
 
@@ -90,6 +74,9 @@ public class DataCache {
             return tasks;
         }, executor).thenAcceptAsync(tasks -> {
             for (Entry<Identifier, CompletableFuture<T>> entry : tasks.entrySet()) {
+                Scribe.LOGGER.info(entry.getKey().getPath());
+                Scribe.LOGGER.info(String.valueOf(entry.getValue().join()));
+
                 map.accept(entry.getKey(), entry.getValue().join());
             }
         }, executor);
