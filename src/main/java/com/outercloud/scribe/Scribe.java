@@ -55,7 +55,7 @@ public class Scribe implements ModInitializer, ClientModInitializer {
 
 	@Override
 	public void onInitializeClient() {
-		//InitializeDataDrivenFeatures();
+		InitializeDataDrivenFeatures();
 
 		RegisterDataDrivenClientParticle(new Identifier(NAMESPACE, "test_particle"));
 	}
@@ -154,6 +154,10 @@ public class Scribe implements ModInitializer, ClientModInitializer {
 	//Particles
 	public static DefaultParticleType GetParticle(Identifier identifier){
 		return particles.get(identifier.toString());
+	}
+
+	public static DataDrivenParticleData GetDataDrivenParticle(Identifier identifier){
+		return dataDrivenParticles.get(identifier);
 	}
 
 	public static DefaultParticleType RegisterParticle(Identifier identifier){

@@ -1,6 +1,7 @@
 package com.outercloud.scribe.data;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.CompletableFuture;
@@ -33,7 +34,23 @@ public class DataCache {
                         particlesLoaded::put
                 )
         ).thenCompose(stage::whenPrepared).thenAcceptAsync(empty -> {
-            Scribe.dataDrivenParticles = particlesLoaded;
+            Map<Identifier, DataDrivenParticleData> particlesRemapped = new HashMap<>();
+
+            Iterator<Entry<Identifier, DataDrivenParticleData>> iterator = particlesLoaded.entrySet().iterator();
+
+            while(iterator.hasNext()){
+                Entry<Identifier, DataDrivenParticleData> entry = iterator.next();
+
+                Identifier identifier = entry.getKey();
+
+                Identifier remappedIdentifier = new Identifier(identifier.getNamespace(), identifier.getPath().substring(21, identifier.getPath().length() - 5));
+
+                Scribe.LOGGER.info("Mapped " + identifier + " to " + remappedIdentifier);
+
+                particlesRemapped.put(remappedIdentifier, entry.getValue());
+            }
+
+            Scribe.dataDrivenParticles = particlesRemapped;
         }, gameExecutor);
     }
 

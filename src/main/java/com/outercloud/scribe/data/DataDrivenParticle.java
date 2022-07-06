@@ -1,8 +1,6 @@
 package com.outercloud.scribe.data;
 
 import com.outercloud.scribe.Scribe;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.particle.AnimatedParticle;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleFactory;
@@ -10,6 +8,7 @@ import net.minecraft.client.particle.SpriteProvider;
 import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.particle.DefaultParticleType;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.Registry;
 
@@ -20,6 +19,12 @@ public class DataDrivenParticle extends AnimatedParticle {
         this.maxAge = 6 * 20;
 
         this.setSpriteForAge(spriteProvider);
+    }
+
+    public void ApplyData(DataDrivenParticleData data){
+        this.scale = data.GetScale().floatValue();
+
+        Scribe.LOGGER.info("Particle scale " + this.scale);
     }
 
     public int getBrightness(float tint) {
@@ -36,9 +41,30 @@ public class DataDrivenParticle extends AnimatedParticle {
         }
 
         public Particle createParticle(DefaultParticleType defaultParticleType, ClientWorld clientWorld, double d, double e, double f, double g, double h, double i) {
-            Scribe.LOGGER.info("Creating particle!" + Registry.PARTICLE_TYPE.getId(defaultParticleType));
+            Identifier identifier = Registry.PARTICLE_TYPE.getId(defaultParticleType);
 
-            return new DataDrivenParticle(clientWorld, d, e, f, 0.0D, 0.0D, 0.0D, this.spriteProvider);
+            Scribe.LOGGER.info("Creating particle " + identifier.getPath());
+
+            Scribe.LOGGER.info(String.valueOf(Scribe.dataDrivenParticles.size()));
+            Scribe.LOGGER.info(String.valueOf(Scribe.dataDrivenParticles.containsKey(identifier)));
+            Scribe.LOGGER.info(identifier.toString());
+            Scribe.LOGGER.info(Scribe.dataDrivenParticles.keySet().toArray()[0].toString());
+
+            DataDrivenParticleData data = Scribe.GetDataDrivenParticle(identifier);
+
+            Scribe.LOGGER.info("Got data " + data.GetScale());
+
+            try {
+                DataDrivenParticle particle = new DataDrivenParticle(clientWorld, d, e, f, 0, 0, 0, this.spriteProvider);
+
+                particle.ApplyData(data);
+
+                return particle;
+            }catch (Exception ex){
+                Scribe.LOGGER.error(String.valueOf(ex));
+            }
+
+            return null;
         }
     }
 }
