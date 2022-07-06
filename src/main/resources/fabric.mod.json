@@ -32,5 +32,11 @@
 
   "custom": {
     "modmenu:api": true
+  },
+
+  "entrypoints": {
+    "client": [
+      "com.outercloud.scribe.Scribe"
+    ]
   }
 }

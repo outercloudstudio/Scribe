@@ -1,6 +1,8 @@
 package com.outercloud.scribe;
 
 import com.outercloud.scribe.config.Config;
+import com.outercloud.scribe.data.DataCache;
+import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
@@ -8,15 +10,21 @@ import net.fabricmc.fabric.api.event.client.ClientSpriteRegistryCallback;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.fabricmc.fabric.api.particle.v1.FabricParticleTypes;
 import net.fabricmc.fabric.api.registry.OxidizableBlocksRegistry;
+import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;
+import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.particle.DefaultParticleType;
+import net.minecraft.resource.ResourceManager;
+import net.minecraft.resource.ResourceType;
 import net.minecraft.screen.PlayerScreenHandler;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.profiler.Profiler;
 import net.minecraft.util.registry.Registry;
 import org.apache.commons.logging.Log;
 import org.slf4j.Logger;
@@ -24,8 +32,10 @@ import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
 
-public class Scribe {
+public class Scribe implements ClientModInitializer {
 	private static final String NAMESPACE = "scribe";
 
 	public static final Logger LOGGER = LoggerFactory.getLogger("scribe");
@@ -36,6 +46,29 @@ public class Scribe {
 	private static Map<String, DefaultParticleType> particles = new HashMap<String, DefaultParticleType>();
 
 	public static Config config;
+
+	@Override
+	public void onInitializeClient() {
+		ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(new IdentifiableResourceReloadListener() {
+			@Override
+			public Identifier getFabricId() {
+				return new Identifier(NAMESPACE, "models");
+			}
+
+			@Override
+			public CompletableFuture<Void> reload(
+				Synchronizer synchronizer,
+				ResourceManager manager,
+				Profiler prepareProfiler,
+				Profiler applyProfiler,
+				Executor prepareExecutor,
+				Executor applyExecutor
+			) {
+				return DataCache.getInstance().reload(synchronizer, manager, prepareProfiler,
+					applyProfiler, prepareExecutor, applyExecutor);
+			}
+		});
+	}
 
 	//Config
 	public static void LoadConfig(String relativePath){
