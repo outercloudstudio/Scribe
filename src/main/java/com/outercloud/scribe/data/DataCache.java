@@ -45,8 +45,6 @@ public class DataCache {
 
                 Identifier remappedIdentifier = new Identifier(identifier.getNamespace(), identifier.getPath().substring(21, identifier.getPath().length() - 5));
 
-                Scribe.LOGGER.info("Mapped " + identifier + " to " + remappedIdentifier);
-
                 particlesRemapped.put(remappedIdentifier, entry.getValue());
             }
 
