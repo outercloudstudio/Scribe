@@ -2,6 +2,8 @@ package com.outercloud.scribe;
 
 import com.outercloud.scribe.config.Config;
 import com.outercloud.scribe.data.DataCache;
+import com.outercloud.scribe.data.DataDrivenParticle;
+import com.outercloud.scribe.data.DataDrivenParticleData;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
@@ -14,7 +16,6 @@ import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
@@ -26,7 +27,6 @@ import net.minecraft.screen.PlayerScreenHandler;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.profiler.Profiler;
 import net.minecraft.util.registry.Registry;
-import org.apache.commons.logging.Log;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,7 +35,7 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 
-public class Scribe implements ClientModInitializer {
+public class Scribe implements ModInitializer, ClientModInitializer {
 	private static final String NAMESPACE = "scribe";
 
 	public static final Logger LOGGER = LoggerFactory.getLogger("scribe");
@@ -44,28 +44,39 @@ public class Scribe implements ClientModInitializer {
 	private static Map<String, BlockEntityType<?>> blockEntities = new HashMap<String, BlockEntityType<?>>();
 	private static Map<String, Item> items = new HashMap<String, Item>();
 	private static Map<String, DefaultParticleType> particles = new HashMap<String, DefaultParticleType>();
+	public static Map<Identifier, DataDrivenParticleData> dataDrivenParticles = new HashMap<Identifier, DataDrivenParticleData>();
 
 	public static Config config;
 
 	@Override
+	public void onInitialize() {
+		RegisterParticle(new Identifier(NAMESPACE, "test_particle"));
+	}
+
+	@Override
 	public void onInitializeClient() {
+		//InitializeDataDrivenFeatures();
+
+		RegisterDataDrivenClientParticle(new Identifier(NAMESPACE, "test_particle"));
+	}
+
+	public static void InitializeDataDrivenFeatures(){
 		ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(new IdentifiableResourceReloadListener() {
 			@Override
 			public Identifier getFabricId() {
-				return new Identifier(NAMESPACE, "models");
+				return new Identifier(NAMESPACE, "data_driven_features");
 			}
 
 			@Override
 			public CompletableFuture<Void> reload(
-				Synchronizer synchronizer,
-				ResourceManager manager,
-				Profiler prepareProfiler,
-				Profiler applyProfiler,
-				Executor prepareExecutor,
-				Executor applyExecutor
+					Synchronizer synchronizer,
+					ResourceManager manager,
+					Profiler prepareProfiler,
+					Profiler applyProfiler,
+					Executor prepareExecutor,
+					Executor applyExecutor
 			) {
-				return DataCache.reload(synchronizer, manager, prepareProfiler,
-					applyProfiler, prepareExecutor, applyExecutor);
+				return DataCache.reload(synchronizer, manager, prepareProfiler, applyProfiler, prepareExecutor, applyExecutor);
 			}
 		});
 	}
@@ -154,10 +165,10 @@ public class Scribe implements ClientModInitializer {
 	}
 
 	public static void RegisterClientParticle(Identifier identifier,  ParticleFactoryRegistry.PendingParticleFactory factory){
-		ClientSpriteRegistryCallback.event(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE).register(((atlasTexture, registry) -> {
-			registry.register(new Identifier(identifier.getNamespace(), "particle/" + identifier.getPath()));
-		}));
-
 		ParticleFactoryRegistry.getInstance().register(GetParticle(identifier), factory);
+	}
+
+	public static void RegisterDataDrivenClientParticle(Identifier identifier){
+		ParticleFactoryRegistry.getInstance().register(GetParticle(identifier), DataDrivenParticle.Factory::new);
 	}
 }

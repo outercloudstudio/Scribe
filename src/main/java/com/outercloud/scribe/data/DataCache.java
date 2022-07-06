@@ -1,6 +1,5 @@
 package com.outercloud.scribe.data;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -10,14 +9,11 @@ import java.util.function.BiConsumer;
 import java.util.function.Function;
 
 import com.outercloud.scribe.Scribe;
-import net.minecraft.resource.Resource;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.resource.ResourceReloader;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.profiler.Profiler;
 public class DataCache {
-    public static Map<Identifier, DataDrivenParticle> particles = Collections.emptyMap();
-
     public static CompletableFuture<Void> reload(
             ResourceReloader.Synchronizer stage,
             ResourceManager resourceManager,
@@ -26,7 +22,7 @@ public class DataCache {
             Executor backgroundExecutor,
             Executor gameExecutor
     ) {
-        Map<Identifier, DataDrivenParticle> particlesLoaded = new HashMap<>();
+        Map<Identifier, DataDrivenParticleData> particlesLoaded = new HashMap<>();
 
         return CompletableFuture.allOf(
                 loadResources(
@@ -37,7 +33,7 @@ public class DataCache {
                         particlesLoaded::put
                 )
         ).thenCompose(stage::whenPrepared).thenAcceptAsync(empty -> {
-            particles = particlesLoaded;
+            Scribe.dataDrivenParticles = particlesLoaded;
         }, gameExecutor);
     }
 
@@ -49,15 +45,7 @@ public class DataCache {
             BiConsumer<Identifier, T> map
     ) {
         return CompletableFuture.supplyAsync(
-                () -> {
-                    Scribe.LOGGER.info("Loading resources of type! " + type);
-
-                    Map<Identifier, Resource> resources = resourceManager.findResources(type, fileName -> fileName.toString().endsWith(".json"));
-
-                    Scribe.LOGGER.info("Done loading resources of type!");
-
-                    return resources;
-                },
+                () -> resourceManager.findResources(type, fileName -> fileName.toString().endsWith(".json")),
                 executor
         ).thenApplyAsync(resources -> {
             Map<Identifier, CompletableFuture<T>> tasks = new HashMap<>();
@@ -74,9 +62,6 @@ public class DataCache {
             return tasks;
         }, executor).thenAcceptAsync(tasks -> {
             for (Entry<Identifier, CompletableFuture<T>> entry : tasks.entrySet()) {
-                Scribe.LOGGER.info(entry.getKey().getPath());
-                Scribe.LOGGER.info(String.valueOf(entry.getValue().join()));
-
                 map.accept(entry.getKey(), entry.getValue().join());
             }
         }, executor);
