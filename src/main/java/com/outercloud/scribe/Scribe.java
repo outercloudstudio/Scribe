@@ -160,16 +160,6 @@ public class Scribe implements ModInitializer, ClientModInitializer {
 		return block;
 	}
 
-	public static Block RegisterBlock(Identifier identifier, Block block, RenderLayer layer){
-		blocks.put(identifier.toString(), block);
-
-		Registry.register(Registry.BLOCK, identifier, GetBlock(identifier));
-
-		BlockRenderLayerMap.INSTANCE.putBlock(GetBlock(identifier), layer);
-
-		return block;
-	}
-
 	public static Block RegisterBlockWithItem(Identifier identifier, Block block, ItemGroup group){
 		blocks.put(identifier.toString(), block);
 
@@ -192,6 +182,10 @@ public class Scribe implements ModInitializer, ClientModInitializer {
 		Registry.register(Registry.ITEM, itemIdentifier, GetItem(itemIdentifier));
 
 		return GetBlock(identifier);
+	}
+
+	public static void RegisterBlockLayer(Identifier identifier, RenderLayer layer){
+		BlockRenderLayerMap.INSTANCE.putBlock(GetBlock(identifier), RenderLayer.getCutout());
 	}
 
 	public static BlockEntityType<?> RegisterBlockEntity(Identifier identifier, FabricBlockEntityTypeBuilder.Factory blockEntity, Identifier ... blocks){
