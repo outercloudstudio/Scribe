@@ -1,7 +1,7 @@
 {
   "scale": 0.5,
   "lifetime": 1,
-  "scale_over_lifetime": {
+  "alpha_over_lifetime": {
     "offset": 0,
     "factor": 0.7
   }

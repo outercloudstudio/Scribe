@@ -96,4 +96,20 @@ public class DataDrivenParticleData extends DataDrivenData {
 
         return scale * factor + offset;
     }
+
+    public float AlphaOverLifetime(float alpha){
+        if(!data.isJsonObject()) return alpha;
+
+        if(!data.getAsJsonObject().has("alpha_over_lifetime")) return alpha;
+
+        if(!data.getAsJsonObject().get("alpha_over_lifetime").isJsonObject()) return alpha;
+
+        float offset = 0;
+        float factor = 1;
+
+        if (data.getAsJsonObject().get("alpha_over_lifetime").getAsJsonObject().has("offset")) offset = ReadFloat(data.getAsJsonObject().get("alpha_over_lifetime").getAsJsonObject().get("offset"));
+        if (data.getAsJsonObject().get("alpha_over_lifetime").getAsJsonObject().has("factor")) factor = ReadFloat(data.getAsJsonObject().get("alpha_over_lifetime").getAsJsonObject().get("factor"));
+
+        return alpha * factor + offset;
+    }
 }

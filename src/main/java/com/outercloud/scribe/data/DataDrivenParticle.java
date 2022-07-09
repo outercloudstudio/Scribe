@@ -17,6 +17,8 @@ public class DataDrivenParticle extends AnimatedParticle {
     float wanderMagnitude;
     float wanderSmoothness;
 
+    float virtualAlpha;
+
     DataDrivenParticle(ClientWorld world, double x, double y, double z, SpriteProvider spriteProvider, Identifier identifier) {
         super(world, x, y, z, spriteProvider, 0.0F);
 
@@ -35,6 +37,8 @@ public class DataDrivenParticle extends AnimatedParticle {
             velocityY = data.GetLinearCoord("y");
             velocityZ = data.GetLinearCoord("z");
         }
+
+        this.virtualAlpha = 1;
     }
 
     @Override
@@ -49,7 +53,9 @@ public class DataDrivenParticle extends AnimatedParticle {
 
         this.scale = data.ScaleOverLifetime(this.scale);
 
-        this.alpha = 1;
+        virtualAlpha = data.AlphaOverLifetime(virtualAlpha);
+
+        this.alpha = virtualAlpha;
     }
 
     public static class Factory implements ParticleFactory<DefaultParticleType> {
