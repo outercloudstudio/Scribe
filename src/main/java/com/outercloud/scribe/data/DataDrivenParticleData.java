@@ -7,8 +7,7 @@ public class DataDrivenParticleData extends DataDrivenData {
         NONE,
         WANDER,
         LINEAR,
-        DIFFUSE,
-        CUSTOM
+        DIFFUSE
     }
 
     public DataDrivenParticleData(JsonElement data) {
@@ -243,5 +242,21 @@ public class DataDrivenParticleData extends DataDrivenData {
         if(!data.getAsJsonObject().get("spawn_over_distance").getAsJsonObject().has("identifier")) return "";
 
         return ReadString(data.getAsJsonObject().get("spawn_over_distance").getAsJsonObject().get("identifier"));
+    }
+
+    public Boolean DoTick(){
+        if(!data.isJsonObject()) return false;
+
+        if(!data.getAsJsonObject().has("tick")) return false;
+
+        return true;
+    }
+
+    public String GetTick(){
+        if(!data.isJsonObject()) return "";
+
+        if(!data.getAsJsonObject().has("tick")) return "";
+
+        return ReadString(data.getAsJsonObject().get("tick"));
     }
 }

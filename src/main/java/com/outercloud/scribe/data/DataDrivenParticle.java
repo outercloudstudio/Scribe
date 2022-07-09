@@ -26,6 +26,8 @@ public class DataDrivenParticle extends AnimatedParticle {
     float targetDistanceTillNewParticleSpawn;
     Vec3f lastParticlePos;
 
+    String tickFunction;
+
     DataDrivenParticle(ClientWorld world, double x, double y, double z, SpriteProvider spriteProvider, Identifier identifier) {
         super(world, x, y, z, spriteProvider, 0.0F);
 
@@ -59,6 +61,8 @@ public class DataDrivenParticle extends AnimatedParticle {
             targetDistanceTillNewParticleSpawn = data.GetSpawnOverDistanceDistance();
             distanceTillNewParticleSpawn = targetDistanceTillNewParticleSpawn;
         }
+
+        if(data.DoTick()) tickFunction = data.GetTick();
     }
 
     @Override
@@ -130,6 +134,10 @@ public class DataDrivenParticle extends AnimatedParticle {
                 targetDistanceTillNewParticleSpawn = data.GetSpawnOverDistanceDistance();
                 distanceTillNewParticleSpawn = targetDistanceTillNewParticleSpawn;
             }
+        }
+
+        if(data.DoTick()){
+            Scribe.GetDataDrivenParticleTick(Identifier.splitOn(tickFunction, ':')).accept(this);
         }
     }
 

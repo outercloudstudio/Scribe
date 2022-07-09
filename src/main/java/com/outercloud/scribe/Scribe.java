@@ -32,6 +32,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
+import java.util.function.Consumer;
 
 public class Scribe implements ModInitializer, ClientModInitializer {
 	private static final String NAMESPACE = "scribe";
@@ -43,6 +44,7 @@ public class Scribe implements ModInitializer, ClientModInitializer {
 	private static Map<String, Item> items = new HashMap<String, Item>();
 	private static Map<String, DefaultParticleType> particles = new HashMap<String, DefaultParticleType>();
 	public static Map<Identifier, DataDrivenParticleData> dataDrivenParticles = new HashMap<Identifier, DataDrivenParticleData>();
+	public static Map<String, Consumer<DataDrivenParticle>> dataDrivenParticleTicks = new HashMap<String, Consumer<DataDrivenParticle>>();
 
 	public static Config config;
 
@@ -56,6 +58,10 @@ public class Scribe implements ModInitializer, ClientModInitializer {
 		InitializeDataDrivenFeatures();
 
 		RegisterDataDrivenClientParticle(new Identifier(NAMESPACE, "test_particle"));
+
+		RegisterDataDrivenClientParticleTick(new Identifier(NAMESPACE, "test_particle_tick"), particle -> {
+			particle.setVelocity(1, 0, 0);
+		});
 	}
 
 	public static void InitializeDataDrivenFeatures(){
@@ -158,6 +164,10 @@ public class Scribe implements ModInitializer, ClientModInitializer {
 		return dataDrivenParticles.get(identifier);
 	}
 
+	public static Consumer<DataDrivenParticle> GetDataDrivenParticleTick(Identifier identifier){
+		return dataDrivenParticleTicks.get(identifier.toString());
+	}
+
 	public static DefaultParticleType RegisterParticle(Identifier identifier){
 		particles.put(identifier.toString(), FabricParticleTypes.simple());
 
@@ -172,5 +182,9 @@ public class Scribe implements ModInitializer, ClientModInitializer {
 
 	public static void RegisterDataDrivenClientParticle(Identifier identifier){
 		ParticleFactoryRegistry.getInstance().register(GetParticle(identifier), DataDrivenParticle.Factory::new);
+	}
+
+	public static void RegisterDataDrivenClientParticleTick(Identifier identifier, Consumer<DataDrivenParticle> tick){
+		dataDrivenParticleTicks.put(identifier.toString(), tick);
 	}
 }

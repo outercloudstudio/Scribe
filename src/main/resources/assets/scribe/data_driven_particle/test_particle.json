@@ -1,25 +1,5 @@
 {
   "scale": 0.5,
   "lifetime": 5,
-  "spawn_over_distance": {
-    "identifier": "scribe:test_particle",
-    "distance": 2,
-    "amount": 2
-  },
-  "linear": {
-    "x": 0.5,
-    "y": 0,
-    "z": {
-      "select": [
-        {
-          "weight": 1,
-          "result": -0.2
-        },
-        {
-          "weight": 1,
-          "result": 0.2
-        }
-      ]
-    }
-  }
+  "tick": "scribe:test_particle_tick"
 }
