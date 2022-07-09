@@ -1,8 +1,8 @@
 {
   "scale": 0.5,
-  "lifetime": 1,
-  "alpha_over_lifetime": {
-    "offset": 0,
-    "factor": 0.7
+  "lifetime": 1.5,
+  "physics": {
+    "collides": true,
+    "gravity": 1
   }
 }

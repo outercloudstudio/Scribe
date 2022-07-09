@@ -39,6 +39,10 @@ public class DataDrivenParticle extends AnimatedParticle {
         }
 
         this.virtualAlpha = 1;
+
+        this.collidesWithWorld = data.GetDoesCollision();
+
+        this.gravityStrength = data.GetGravity();
     }
 
     @Override

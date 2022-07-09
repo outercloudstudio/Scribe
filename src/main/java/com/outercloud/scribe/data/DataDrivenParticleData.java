@@ -112,4 +112,28 @@ public class DataDrivenParticleData extends DataDrivenData {
 
         return alpha * factor + offset;
     }
+
+    public boolean GetDoesCollision(){
+        if(!data.isJsonObject()) return false;
+
+        if(!data.getAsJsonObject().has("physics")) return false;
+
+        if(!data.getAsJsonObject().get("physics").isJsonObject()) return false;
+
+        if(!data.getAsJsonObject().get("physics").getAsJsonObject().has("collides")) return false;
+
+        return ReadBool(data.getAsJsonObject().get("physics").getAsJsonObject().get("collides"));
+    }
+
+    public float GetGravity(){
+        if(!data.isJsonObject()) return 0;
+
+        if(!data.getAsJsonObject().has("physics")) return 0;
+
+        if(!data.getAsJsonObject().get("physics").isJsonObject()) return 0;
+
+        if(!data.getAsJsonObject().get("physics").getAsJsonObject().has("gravity")) return 0;
+
+        return ReadFloat(data.getAsJsonObject().get("physics").getAsJsonObject().get("gravity"));
+    }
 }

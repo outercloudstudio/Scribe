@@ -81,4 +81,54 @@ public class DataDrivenData {
 
         return 0;
     }
+
+    public boolean ReadBool(JsonElement element){
+        if (element.isJsonObject()){
+            if (element.getAsJsonObject().has("select")){
+                if(!element.getAsJsonObject().get("select").isJsonArray()) return false;
+
+                int maxWeight = 0;
+
+                Iterator<JsonElement> iterator = element.getAsJsonObject().get("select").getAsJsonArray().iterator();
+
+                while(iterator.hasNext()){
+                    JsonElement nextElement = iterator.next();
+
+                    if(!nextElement.isJsonObject()) return false;
+
+                    if(!nextElement.getAsJsonObject().has("weight")) return false;
+
+                    if(!nextElement.getAsJsonObject().get("weight").isJsonPrimitive()) return false;
+
+                    if(!nextElement.getAsJsonObject().get("weight").getAsJsonPrimitive().isNumber()) return false;
+
+                    if(!nextElement.getAsJsonObject().has("result")) return false;
+
+                    if(!nextElement.getAsJsonObject().get("result").isJsonPrimitive()) return false;
+
+                    if(!nextElement.getAsJsonObject().get("result").getAsJsonPrimitive().isBoolean()) return false;
+
+                    maxWeight += nextElement.getAsJsonObject().get("weight").getAsNumber().intValue();
+                }
+
+                iterator = element.getAsJsonObject().get("select").getAsJsonArray().iterator();
+
+                int random = Random.create().nextInt(maxWeight);
+
+                while(iterator.hasNext()){
+                    JsonElement nextElement = iterator.next();
+
+                    random -= nextElement.getAsJsonObject().get("weight").getAsNumber().intValue();
+
+                    if(random < 0){
+                        return nextElement.getAsJsonObject().get("result").getAsBoolean();
+                    }
+                }
+            }
+        } else if (element.isJsonPrimitive() && element.getAsJsonPrimitive().isBoolean()) {
+            return element.getAsBoolean();
+        }
+
+        return false;
+    }
 }
