@@ -47,6 +47,8 @@ public class DataDrivenParticle extends AnimatedParticle {
             velocityZ += random.nextBetween((int)-wanderMagnitude, (int)wanderMagnitude) / wanderSmoothness;
         }
 
+        this.scale = data.ScaleOverLifetime(this.scale);
+
         this.alpha = 1;
     }
 
