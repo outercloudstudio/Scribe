@@ -7,6 +7,7 @@ import net.minecraft.client.particle.ParticleFactory;
 import net.minecraft.client.particle.SpriteProvider;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.particle.DefaultParticleType;
+import net.minecraft.particle.ParticleEffect;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3f;
 import net.minecraft.util.registry.Registry;
@@ -18,6 +19,12 @@ public class DataDrivenParticle extends AnimatedParticle {
     float wanderSmoothness;
 
     float virtualAlpha;
+
+    float timeTillNewParticleSpawn;
+
+    float distanceTillNewParticleSpawn;
+    float targetDistanceTillNewParticleSpawn;
+    Vec3f lastParticlePos;
 
     DataDrivenParticle(ClientWorld world, double x, double y, double z, SpriteProvider spriteProvider, Identifier identifier) {
         super(world, x, y, z, spriteProvider, 0.0F);
@@ -43,6 +50,15 @@ public class DataDrivenParticle extends AnimatedParticle {
         collidesWithWorld = data.GetDoesCollision();
 
         gravityStrength = data.GetGravity();
+
+        if(data.DoSpawnOverTime()) timeTillNewParticleSpawn = data.GetSpawnOverTimeRate();
+
+        if(data.DoSpawnOverDistance()){
+            lastParticlePos = new Vec3f((float) x, (float) y, (float) z);
+
+            targetDistanceTillNewParticleSpawn = data.GetSpawnOverDistanceDistance();
+            distanceTillNewParticleSpawn = targetDistanceTillNewParticleSpawn;
+        }
     }
 
     @Override
@@ -50,9 +66,9 @@ public class DataDrivenParticle extends AnimatedParticle {
         super.tick();
 
         if(data.GetMovementType() == DataDrivenParticleData.MovementType.WANDER) {
-            velocityX += random.nextBetween((int)-wanderMagnitude, (int)wanderMagnitude) / wanderSmoothness;
-            velocityY += random.nextBetween((int)-wanderMagnitude, (int)wanderMagnitude) / wanderSmoothness;
-            velocityZ += random.nextBetween((int)-wanderMagnitude, (int)wanderMagnitude) / wanderSmoothness;
+            velocityX += random.nextBetween((int) -wanderMagnitude, (int) wanderMagnitude) / wanderSmoothness;
+            velocityY += random.nextBetween((int) -wanderMagnitude, (int) wanderMagnitude) / wanderSmoothness;
+            velocityZ += random.nextBetween((int) -wanderMagnitude, (int) wanderMagnitude) / wanderSmoothness;
         }
 
         scale = data.ScaleOverLifetime(scale);
@@ -61,9 +77,60 @@ public class DataDrivenParticle extends AnimatedParticle {
 
         alpha = virtualAlpha;
 
-        velocityX = data.AccelerationDrag((float)velocityX);
-        velocityY = data.AccelerationDrag((float)velocityY);
-        velocityZ = data.AccelerationDrag((float)velocityZ);
+        velocityX = data.AccelerationDrag((float) velocityX);
+        velocityY = data.AccelerationDrag((float) velocityY);
+        velocityZ = data.AccelerationDrag((float) velocityZ);
+
+        if(data.DoSpawnOverTime()){
+            timeTillNewParticleSpawn -= (float) 1 / (float) 20;
+
+            if(timeTillNewParticleSpawn <= 0){
+                timeTillNewParticleSpawn = data.GetSpawnOverTimeRate();
+
+                int amount = data.GetSpawnOverTimeAmount();
+
+                for (int i = 0; i < amount; i++) {
+                    Identifier identifier = Identifier.splitOn(data.GetSpawnOverTimeIdentifier(), ':');
+
+                    ParticleEffect particleEffect = Scribe.GetParticle(identifier);
+
+                    world.addParticle(particleEffect, x, y, z, 0, 0, 0);
+                }
+            }
+        }
+
+        if(data.DoSpawnOverDistance()){
+            float distance = (float) Math.sqrt(Math.pow(x - lastParticlePos.getX(), 2) + Math.pow(y - lastParticlePos.getY(), 2) + Math.pow(z - lastParticlePos.getZ(), 2));
+
+            distanceTillNewParticleSpawn -= distance;
+
+            Scribe.LOGGER.info(String.valueOf(distance));
+            Scribe.LOGGER.info(String.valueOf(distanceTillNewParticleSpawn));
+
+            lastParticlePos = new Vec3f((float) x, (float) y, (float) z);
+
+
+            if(distanceTillNewParticleSpawn <= 0) {
+                while (distanceTillNewParticleSpawn <= 0) {
+                    distanceTillNewParticleSpawn += targetDistanceTillNewParticleSpawn;
+
+                    Scribe.LOGGER.info("SPAWN!");
+
+                    int amount = data.GetSpawnOverDistanceAmount();
+
+                    for (int i = 0; i < amount; i++) {
+                        Identifier identifier = Identifier.splitOn(data.GetSpawnOverDistanceIdentifier(), ':');
+
+                        ParticleEffect particleEffect = Scribe.GetParticle(identifier);
+
+                        world.addParticle(particleEffect, x, y, z, 0, 0, 0);
+                    }
+                }
+
+                targetDistanceTillNewParticleSpawn = data.GetSpawnOverDistanceDistance();
+                distanceTillNewParticleSpawn = targetDistanceTillNewParticleSpawn;
+            }
+        }
     }
 
     public static class Factory implements ParticleFactory<DefaultParticleType> {

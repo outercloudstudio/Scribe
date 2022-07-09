@@ -131,4 +131,54 @@ public class DataDrivenData {
 
         return false;
     }
+
+    public String ReadString(JsonElement element){
+        if (element.isJsonObject()){
+            if (element.getAsJsonObject().has("select")){
+                if(!element.getAsJsonObject().get("select").isJsonArray()) return "";
+
+                int maxWeight = 0;
+
+                Iterator<JsonElement> iterator = element.getAsJsonObject().get("select").getAsJsonArray().iterator();
+
+                while(iterator.hasNext()){
+                    JsonElement nextElement = iterator.next();
+
+                    if(!nextElement.isJsonObject()) return "";
+
+                    if(!nextElement.getAsJsonObject().has("weight")) return "";
+
+                    if(!nextElement.getAsJsonObject().get("weight").isJsonPrimitive()) return "";
+
+                    if(!nextElement.getAsJsonObject().get("weight").getAsJsonPrimitive().isNumber()) return "";
+
+                    if(!nextElement.getAsJsonObject().has("result")) return "";
+
+                    if(!nextElement.getAsJsonObject().get("result").isJsonPrimitive()) return "";
+
+                    if(!nextElement.getAsJsonObject().get("result").getAsJsonPrimitive().isString()) return "";
+
+                    maxWeight += nextElement.getAsJsonObject().get("weight").getAsNumber().intValue();
+                }
+
+                iterator = element.getAsJsonObject().get("select").getAsJsonArray().iterator();
+
+                int random = Random.create().nextInt(maxWeight);
+
+                while(iterator.hasNext()){
+                    JsonElement nextElement = iterator.next();
+
+                    random -= nextElement.getAsJsonObject().get("weight").getAsNumber().intValue();
+
+                    if(random < 0){
+                        return nextElement.getAsJsonObject().get("result").getAsString();
+                    }
+                }
+            }
+        } else if (element.isJsonPrimitive() && element.getAsJsonPrimitive().isString()) {
+            return element.getAsString();
+        }
+
+        return "";
+    }
 }

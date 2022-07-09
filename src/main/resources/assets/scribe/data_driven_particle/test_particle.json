@@ -1,32 +1,25 @@
 {
   "scale": 0.5,
-  "lifetime": 3,
+  "lifetime": 5,
+  "spawn_over_distance": {
+    "identifier": "scribe:test_particle",
+    "distance": 2,
+    "amount": 2
+  },
   "linear": {
-    "x": {
-      "uniform": {
-        "min": -0.5,
-        "max": 0.5
-      }
-    },
-    "y": {
-      "uniform": {
-        "min": -0.5,
-        "max": 0.5
-      }
-    },
+    "x": 0.5,
+    "y": 0,
     "z": {
-      "uniform": {
-        "min": -0.5,
-        "max": 0.5
-      }
+      "select": [
+        {
+          "weight": 1,
+          "result": -0.2
+        },
+        {
+          "weight": 1,
+          "result": 0.2
+        }
+      ]
     }
-  },
-  "acceleration_drag": {
-    "offset": 0,
-    "factor": 0.8
-  },
-  "alpha_over_lifetime": {
-    "offset": 0,
-    "factor": 0.7
   }
 }

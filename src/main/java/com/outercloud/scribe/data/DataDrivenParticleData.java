@@ -58,7 +58,7 @@ public class DataDrivenParticleData extends DataDrivenData {
     }
 
     public float GetWanderSmoothness(){
-        if(!data.isJsonObject()) return 1;
+        if(!data.isJsonObject()) return 300;
 
         if(!data.getAsJsonObject().has("wander")) return 300;
 
@@ -151,5 +151,97 @@ public class DataDrivenParticleData extends DataDrivenData {
         if (data.getAsJsonObject().get("acceleration_drag").getAsJsonObject().has("factor")) factor = ReadFloat(data.getAsJsonObject().get("acceleration_drag").getAsJsonObject().get("factor"));
 
         return vel * factor + offset;
+    }
+
+    public boolean DoSpawnOverTime(){
+        if(!data.isJsonObject()) return false;
+
+        if(!data.getAsJsonObject().has("spawn_over_time")) return false;
+
+        if(!data.getAsJsonObject().get("spawn_over_time").isJsonObject()) return false;
+
+        return true;
+    }
+
+    public float GetSpawnOverTimeRate(){
+        if(!data.isJsonObject()) return 0;
+
+        if(!data.getAsJsonObject().has("spawn_over_time")) return 0;
+
+        if(!data.getAsJsonObject().get("spawn_over_time").isJsonObject()) return 0;
+
+        if(!data.getAsJsonObject().get("spawn_over_time").getAsJsonObject().has("rate")) return 0;
+
+        return ReadFloat(data.getAsJsonObject().get("spawn_over_time").getAsJsonObject().get("rate"));
+    }
+
+    public int GetSpawnOverTimeAmount(){
+        if(!data.isJsonObject()) return 0;
+
+        if(!data.getAsJsonObject().has("spawn_over_time")) return 0;
+
+        if(!data.getAsJsonObject().get("spawn_over_time").isJsonObject()) return 0;
+
+        if(!data.getAsJsonObject().get("spawn_over_time").getAsJsonObject().has("amount")) return 0;
+
+        return (int)ReadFloat(data.getAsJsonObject().get("spawn_over_time").getAsJsonObject().get("amount"));
+    }
+
+    public String GetSpawnOverTimeIdentifier(){
+        if(!data.isJsonObject()) return "";
+
+        if(!data.getAsJsonObject().has("spawn_over_time")) return "";
+
+        if(!data.getAsJsonObject().get("spawn_over_time").isJsonObject()) return "";
+
+        if(!data.getAsJsonObject().get("spawn_over_time").getAsJsonObject().has("identifier")) return "";
+
+        return ReadString(data.getAsJsonObject().get("spawn_over_time").getAsJsonObject().get("identifier"));
+    }
+
+    public boolean DoSpawnOverDistance(){
+        if(!data.isJsonObject()) return false;
+
+        if(!data.getAsJsonObject().has("spawn_over_distance")) return false;
+
+        if(!data.getAsJsonObject().get("spawn_over_distance").isJsonObject()) return false;
+
+        return true;
+    }
+
+    public float GetSpawnOverDistanceDistance(){
+        if(!data.isJsonObject()) return 0;
+
+        if(!data.getAsJsonObject().has("spawn_over_distance")) return 0;
+
+        if(!data.getAsJsonObject().get("spawn_over_distance").isJsonObject()) return 0;
+
+        if(!data.getAsJsonObject().get("spawn_over_distance").getAsJsonObject().has("distance")) return 0;
+
+        return ReadFloat(data.getAsJsonObject().get("spawn_over_distance").getAsJsonObject().get("distance"));
+    }
+
+    public int GetSpawnOverDistanceAmount(){
+        if(!data.isJsonObject()) return 0;
+
+        if(!data.getAsJsonObject().has("spawn_over_distance")) return 0;
+
+        if(!data.getAsJsonObject().get("spawn_over_distance").isJsonObject()) return 0;
+
+        if(!data.getAsJsonObject().get("spawn_over_distance").getAsJsonObject().has("amount")) return 0;
+
+        return (int)ReadFloat(data.getAsJsonObject().get("spawn_over_distance").getAsJsonObject().get("amount"));
+    }
+
+    public String GetSpawnOverDistanceIdentifier(){
+        if(!data.isJsonObject()) return "";
+
+        if(!data.getAsJsonObject().has("spawn_over_distance")) return "";
+
+        if(!data.getAsJsonObject().get("spawn_over_distance").isJsonObject()) return "";
+
+        if(!data.getAsJsonObject().get("spawn_over_distance").getAsJsonObject().has("identifier")) return "";
+
+        return ReadString(data.getAsJsonObject().get("spawn_over_distance").getAsJsonObject().get("identifier"));
     }
 }
