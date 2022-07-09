@@ -34,7 +34,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.function.Consumer;
 
-public class Scribe {
+public class Scribe implements ModInitializer, ClientModInitializer {
 	private static final String NAMESPACE = "scribe";
 
 	public static final Logger LOGGER = LoggerFactory.getLogger("scribe");
@@ -47,6 +47,16 @@ public class Scribe {
 	public static Map<String, Consumer<DataDrivenParticle>> dataDrivenParticleTicks = new HashMap<String, Consumer<DataDrivenParticle>>();
 
 	public static Config config;
+
+	@Override
+	public void onInitialize() {
+
+	}
+
+	@Override
+	public void onInitializeClient() {
+
+	}
 
 	public static void InitializeDataDrivenFeatures(){
 		ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(new IdentifiableResourceReloadListener() {
@@ -78,6 +88,14 @@ public class Scribe {
 	//Items
 	public static Item GetItem(Identifier identifier){
 		return items.get(identifier.toString());
+	}
+
+	public static Item RegisterItem(Identifier identifier, Item item, ItemGroup group){
+		items.put(identifier.toString(), item);
+
+		Registry.register(Registry.ITEM, identifier, GetItem(identifier));
+
+		return GetItem(identifier);
 	}
 
 	//Blocks
