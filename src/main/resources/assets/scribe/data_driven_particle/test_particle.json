@@ -1,5 +1,9 @@
 {
   "scale": 0.5,
   "lifetime": 5,
-  "tick": "scribe:test_particle_tick"
+  "linear": {
+    "x": 1,
+    "y": 0,
+    "z": 0
+  }
 }

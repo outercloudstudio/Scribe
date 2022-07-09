@@ -58,10 +58,6 @@ public class Scribe implements ModInitializer, ClientModInitializer {
 		InitializeDataDrivenFeatures();
 
 		RegisterDataDrivenClientParticle(new Identifier(NAMESPACE, "test_particle"));
-
-		RegisterDataDrivenClientParticleTick(new Identifier(NAMESPACE, "test_particle_tick"), particle -> {
-			particle.setVelocity(1, 0, 0);
-		});
 	}
 
 	public static void InitializeDataDrivenFeatures(){

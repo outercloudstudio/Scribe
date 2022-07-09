@@ -28,6 +28,10 @@ public class DataDrivenParticle extends AnimatedParticle {
 
     String tickFunction;
 
+    float virtualVelX;
+    float virtualVelY;
+    float virtualVelZ;
+
     DataDrivenParticle(ClientWorld world, double x, double y, double z, SpriteProvider spriteProvider, Identifier identifier) {
         super(world, x, y, z, spriteProvider, 0.0F);
 
@@ -42,9 +46,9 @@ public class DataDrivenParticle extends AnimatedParticle {
             wanderMagnitude = data.GetWanderMagnitude();
             wanderSmoothness = data.GetWanderSmoothness();
         } else if(data.GetMovementType() == DataDrivenParticleData.MovementType.LINEAR) {
-            velocityX = data.GetLinearCoord("x");
-            velocityY = data.GetLinearCoord("y");
-            velocityZ = data.GetLinearCoord("z");
+            virtualVelX = data.GetLinearCoord("x");
+            virtualVelY = data.GetLinearCoord("y");
+            virtualVelZ = data.GetLinearCoord("z");
         }
 
         virtualAlpha = 1;
@@ -70,9 +74,9 @@ public class DataDrivenParticle extends AnimatedParticle {
         super.tick();
 
         if(data.GetMovementType() == DataDrivenParticleData.MovementType.WANDER) {
-            velocityX += random.nextBetween((int) -wanderMagnitude, (int) wanderMagnitude) / wanderSmoothness;
-            velocityY += random.nextBetween((int) -wanderMagnitude, (int) wanderMagnitude) / wanderSmoothness;
-            velocityZ += random.nextBetween((int) -wanderMagnitude, (int) wanderMagnitude) / wanderSmoothness;
+            virtualVelX += random.nextBetween((int) -wanderMagnitude, (int) wanderMagnitude) / wanderSmoothness;
+            virtualVelY += random.nextBetween((int) -wanderMagnitude, (int) wanderMagnitude) / wanderSmoothness;
+            virtualVelZ += random.nextBetween((int) -wanderMagnitude, (int) wanderMagnitude) / wanderSmoothness;
         }
 
         scale = data.ScaleOverLifetime(scale);
@@ -81,9 +85,9 @@ public class DataDrivenParticle extends AnimatedParticle {
 
         alpha = virtualAlpha;
 
-        velocityX = data.AccelerationDrag((float) velocityX);
-        velocityY = data.AccelerationDrag((float) velocityY);
-        velocityZ = data.AccelerationDrag((float) velocityZ);
+        virtualVelX = data.AccelerationDrag(virtualVelX);
+        virtualVelY = data.AccelerationDrag(virtualVelY);
+        virtualVelZ = data.AccelerationDrag(virtualVelZ);
 
         if(data.DoSpawnOverTime()){
             timeTillNewParticleSpawn -= (float) 1 / (float) 20;
@@ -107,9 +111,6 @@ public class DataDrivenParticle extends AnimatedParticle {
             float distance = (float) Math.sqrt(Math.pow(x - lastParticlePos.getX(), 2) + Math.pow(y - lastParticlePos.getY(), 2) + Math.pow(z - lastParticlePos.getZ(), 2));
 
             distanceTillNewParticleSpawn -= distance;
-
-            Scribe.LOGGER.info(String.valueOf(distance));
-            Scribe.LOGGER.info(String.valueOf(distanceTillNewParticleSpawn));
 
             lastParticlePos = new Vec3f((float) x, (float) y, (float) z);
 
@@ -139,6 +140,10 @@ public class DataDrivenParticle extends AnimatedParticle {
         if(data.DoTick()){
             Scribe.GetDataDrivenParticleTick(Identifier.splitOn(tickFunction, ':')).accept(this);
         }
+
+        velocityX = virtualVelX;
+        velocityY = virtualVelY;
+        velocityZ = virtualVelZ;
     }
 
     public static class Factory implements ParticleFactory<DefaultParticleType> {
