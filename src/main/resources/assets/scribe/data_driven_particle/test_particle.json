@@ -1,5 +1,16 @@
 {
-  "scale": 0.2,
+  "scale": {
+    "select": [
+      {
+        "weight": 5,
+        "result": 0.1
+      },
+      {
+        "weight": 1,
+        "result": 1
+      }
+    ]
+  },
   "lifetime": 25,
   "movement:wander": {
     "magnitude": 1,

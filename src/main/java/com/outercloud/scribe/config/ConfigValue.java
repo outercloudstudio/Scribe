@@ -1,8 +1,5 @@
 package com.outercloud.scribe.config;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class ConfigValue {
     public static enum ValueType{
         UNKNOWN,

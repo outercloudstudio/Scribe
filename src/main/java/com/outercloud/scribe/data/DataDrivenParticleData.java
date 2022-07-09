@@ -2,11 +2,9 @@ package com.outercloud.scribe.data;
 
 import com.google.gson.JsonElement;
 
-public class DataDrivenParticleData {
-    JsonElement data;
-
-    public DataDrivenParticleData(JsonElement data){
-        this.data = data;
+public class DataDrivenParticleData extends DataDrivenData {
+    public DataDrivenParticleData(JsonElement data) {
+        super(data);
     }
 
     public Number GetScale(){
@@ -14,7 +12,7 @@ public class DataDrivenParticleData {
 
         if(!data.getAsJsonObject().has("scale")) return 1;
 
-        return data.getAsJsonObject().get("scale").getAsNumber();
+        return ReadFloat(data.getAsJsonObject().get("scale"));
     }
 
     public Number GetLifetime(){
@@ -22,7 +20,7 @@ public class DataDrivenParticleData {
 
         if(!data.getAsJsonObject().has("lifetime")) return 1;
 
-        return data.getAsJsonObject().get("lifetime").getAsNumber();
+        return ReadFloat(data.getAsJsonObject().get("lifetime"));
     }
 
     public boolean GetShouldWander(){
