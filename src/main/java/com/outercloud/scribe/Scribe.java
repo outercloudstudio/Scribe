@@ -8,14 +8,25 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
+import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.fabricmc.fabric.api.particle.v1.FabricParticleTypes;
 import net.fabricmc.fabric.api.registry.OxidizableBlocksRegistry;
 import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.client.model.TexturedModelData;
 import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.render.entity.EntityRendererFactory;
+import net.minecraft.client.render.entity.model.EntityModel;
+import net.minecraft.client.render.entity.model.EntityModelLayer;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
@@ -45,6 +56,7 @@ public class Scribe implements ModInitializer, ClientModInitializer {
 	private static Map<String, DefaultParticleType> particles = new HashMap<String, DefaultParticleType>();
 	public static Map<Identifier, DataDrivenParticleData> dataDrivenParticles = new HashMap<Identifier, DataDrivenParticleData>();
 	public static Map<String, Consumer<DataDrivenParticle>> dataDrivenParticleTicks = new HashMap<String, Consumer<DataDrivenParticle>>();
+	private static Map<String, EntityType<?>> entities = new HashMap<String, EntityType<?>>();
 
 	public static Config config;
 
@@ -98,6 +110,39 @@ public class Scribe implements ModInitializer, ClientModInitializer {
 		return GetItem(identifier);
 	}
 
+	//Entities
+	public static EntityType<?> GetEntity(Identifier identifier){
+		return entities.get(identifier.toString());
+	}
+
+	public static EntityType RegisterEntity(Identifier identifier, EntityType<?> entityType){
+		entities.put(identifier.toString(), entityType);
+
+		Registry.register(Registry.ENTITY_TYPE, identifier, entityType);
+
+		return GetEntity(identifier);
+	}
+
+	public static EntityType RegisterEntity(Identifier identifier, EntityType<? extends LivingEntity> entityType, DefaultAttributeContainer.Builder attributes){
+		entities.put(identifier.toString(), entityType);
+
+		Registry.register(Registry.ENTITY_TYPE, identifier, entityType);
+
+		FabricDefaultAttributeRegistry.register(entityType, attributes);
+
+		return GetEntity(identifier);
+	}
+
+	public static <E extends Entity> void RegisterClientEntity(Identifier identifier, EntityRendererFactory<E> entityRendererFactory){
+		EntityRendererRegistry.register((EntityType<? extends E>) GetEntity(identifier), entityRendererFactory);
+	}
+
+	public static <E extends Entity> void RegisterClientEntity(Identifier identifier, EntityRendererFactory<E> entityRendererFactory, EntityModelLayer layer, EntityModelLayerRegistry.TexturedModelDataProvider texturedModelDataProvider){
+		EntityRendererRegistry.register((EntityType<? extends E>) GetEntity(identifier), entityRendererFactory);
+
+		EntityModelLayerRegistry.registerModelLayer(layer, texturedModelDataProvider);
+	}
+
 	//Blocks
 	public static Block GetBlock(Identifier identifier){
 		return blocks.get(identifier.toString());
@@ -115,6 +160,16 @@ public class Scribe implements ModInitializer, ClientModInitializer {
 		return block;
 	}
 
+	public static Block RegisterBlock(Identifier identifier, Block block, RenderLayer layer){
+		blocks.put(identifier.toString(), block);
+
+		Registry.register(Registry.BLOCK, identifier, GetBlock(identifier));
+
+		BlockRenderLayerMap.INSTANCE.putBlock(GetBlock(identifier), layer);
+
+		return block;
+	}
+
 	public static Block RegisterBlockWithItem(Identifier identifier, Block block, ItemGroup group){
 		blocks.put(identifier.toString(), block);
 
@@ -124,10 +179,10 @@ public class Scribe implements ModInitializer, ClientModInitializer {
 
 		Registry.register(Registry.ITEM, identifier, GetItem(identifier));
 
-		return block;
+		return GetBlock(identifier);
 	}
 
-	public static void RegisterBlockWithItem(Identifier identifier, Identifier itemIdentifier, Block block, ItemGroup group){
+	public static Block RegisterBlockWithItem(Identifier identifier, Identifier itemIdentifier, Block block, ItemGroup group){
 		blocks.put(identifier.toString(), block);
 
 		Registry.register(Registry.BLOCK, identifier, GetBlock(identifier));
@@ -135,10 +190,8 @@ public class Scribe implements ModInitializer, ClientModInitializer {
 		items.put(itemIdentifier.toString(), new BlockItem(GetBlock(identifier), new Item.Settings().group(group)));
 
 		Registry.register(Registry.ITEM, itemIdentifier, GetItem(itemIdentifier));
-	}
 
-	public static void RegisterBlockLayer(Identifier identifier, RenderLayer layer){
-		BlockRenderLayerMap.INSTANCE.putBlock(GetBlock(identifier), RenderLayer.getCutout());
+		return GetBlock(identifier);
 	}
 
 	public static BlockEntityType<?> RegisterBlockEntity(Identifier identifier, FabricBlockEntityTypeBuilder.Factory blockEntity, Identifier ... blocks){
