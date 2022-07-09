@@ -22,12 +22,12 @@ public class DataDrivenParticle extends AnimatedParticle {
     DataDrivenParticle(ClientWorld world, double x, double y, double z, SpriteProvider spriteProvider, Identifier identifier) {
         super(world, x, y, z, spriteProvider, 0.0F);
 
-        this.setSpriteForAge(spriteProvider);
+        setSpriteForAge(spriteProvider);
 
         data = Scribe.GetDataDrivenParticle(identifier);
-        this.maxAge = Math.round(data.GetLifetime().floatValue()) * 20;
+        maxAge = Math.round(data.GetLifetime().floatValue()) * 20;
 
-        this.scale = data.GetScale().floatValue();
+        scale = data.GetScale().floatValue();
 
         if(data.GetMovementType() == DataDrivenParticleData.MovementType.WANDER) {
             wanderMagnitude = data.GetWanderMagnitude();
@@ -38,11 +38,11 @@ public class DataDrivenParticle extends AnimatedParticle {
             velocityZ = data.GetLinearCoord("z");
         }
 
-        this.virtualAlpha = 1;
+        virtualAlpha = 1;
 
-        this.collidesWithWorld = data.GetDoesCollision();
+        collidesWithWorld = data.GetDoesCollision();
 
-        this.gravityStrength = data.GetGravity();
+        gravityStrength = data.GetGravity();
     }
 
     @Override
@@ -55,11 +55,15 @@ public class DataDrivenParticle extends AnimatedParticle {
             velocityZ += random.nextBetween((int)-wanderMagnitude, (int)wanderMagnitude) / wanderSmoothness;
         }
 
-        this.scale = data.ScaleOverLifetime(this.scale);
+        scale = data.ScaleOverLifetime(scale);
 
         virtualAlpha = data.AlphaOverLifetime(virtualAlpha);
 
-        this.alpha = virtualAlpha;
+        alpha = virtualAlpha;
+
+        velocityX = data.AccelerationDrag((float)velocityX);
+        velocityY = data.AccelerationDrag((float)velocityY);
+        velocityZ = data.AccelerationDrag((float)velocityZ);
     }
 
     public static class Factory implements ParticleFactory<DefaultParticleType> {

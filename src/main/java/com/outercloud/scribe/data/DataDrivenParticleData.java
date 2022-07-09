@@ -136,4 +136,20 @@ public class DataDrivenParticleData extends DataDrivenData {
 
         return ReadFloat(data.getAsJsonObject().get("physics").getAsJsonObject().get("gravity"));
     }
+
+    public float AccelerationDrag(float vel){
+        if(!data.isJsonObject()) return vel;
+
+        if(!data.getAsJsonObject().has("acceleration_drag")) return vel;
+
+        if(!data.getAsJsonObject().get("acceleration_drag").isJsonObject()) return vel;
+
+        float offset = 0;
+        float factor = 1;
+
+        if (data.getAsJsonObject().get("acceleration_drag").getAsJsonObject().has("offset")) offset = ReadFloat(data.getAsJsonObject().get("acceleration_drag").getAsJsonObject().get("offset"));
+        if (data.getAsJsonObject().get("acceleration_drag").getAsJsonObject().has("factor")) factor = ReadFloat(data.getAsJsonObject().get("acceleration_drag").getAsJsonObject().get("factor"));
+
+        return vel * factor + offset;
+    }
 }

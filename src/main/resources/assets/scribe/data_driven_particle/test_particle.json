@@ -1,8 +1,32 @@
 {
   "scale": 0.5,
-  "lifetime": 1.5,
-  "physics": {
-    "collides": true,
-    "gravity": 1
+  "lifetime": 3,
+  "linear": {
+    "x": {
+      "uniform": {
+        "min": -0.5,
+        "max": 0.5
+      }
+    },
+    "y": {
+      "uniform": {
+        "min": -0.5,
+        "max": 0.5
+      }
+    },
+    "z": {
+      "uniform": {
+        "min": -0.5,
+        "max": 0.5
+      }
+    }
+  },
+  "acceleration_drag": {
+    "offset": 0,
+    "factor": 0.8
+  },
+  "alpha_over_lifetime": {
+    "offset": 0,
+    "factor": 0.7
   }
 }
