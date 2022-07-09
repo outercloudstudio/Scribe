@@ -8,10 +8,14 @@ import net.minecraft.client.particle.SpriteProvider;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.particle.DefaultParticleType;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.Vec3f;
 import net.minecraft.util.registry.Registry;
 
 public class DataDrivenParticle extends AnimatedParticle {
     DataDrivenParticleData data;
+
+    float wanderMagnitude;
+    float wanderSmoothness;
 
     DataDrivenParticle(ClientWorld world, double x, double y, double z, SpriteProvider spriteProvider, Identifier identifier) {
         super(world, x, y, z, spriteProvider, 0.0F);
@@ -19,23 +23,31 @@ public class DataDrivenParticle extends AnimatedParticle {
         this.setSpriteForAge(spriteProvider);
 
         data = Scribe.GetDataDrivenParticle(identifier);
-
         this.maxAge = Math.round(data.GetLifetime().floatValue()) * 20;
 
         this.scale = data.GetScale().floatValue();
+
+        if(data.GetMovementType() == DataDrivenParticleData.MovementType.WANDER) {
+            wanderMagnitude = data.GetWanderMagnitude();
+            wanderSmoothness = data.GetWanderSmoothness();
+        } else if(data.GetMovementType() == DataDrivenParticleData.MovementType.LINEAR) {
+            velocityX = data.GetLinearCoord("x");
+            velocityY = data.GetLinearCoord("y");
+            velocityZ = data.GetLinearCoord("z");
+        }
     }
 
     @Override
     public void tick() {
         super.tick();
 
-        Scribe.LOGGER.info(String.valueOf(data.GetShouldWander()));
-
-        if(data.GetShouldWander()) {
-            velocityX += random.nextBetween((int) -data.GetWanderMagnitude().doubleValue(), (int) data.GetWanderMagnitude().doubleValue()) / data.GetWanderSmoothness().doubleValue();
-            velocityY += random.nextBetween((int) -data.GetWanderMagnitude().doubleValue(), (int) data.GetWanderMagnitude().doubleValue()) / data.GetWanderSmoothness().doubleValue();
-            velocityZ += random.nextBetween((int) -data.GetWanderMagnitude().doubleValue(), (int) data.GetWanderMagnitude().doubleValue()) / data.GetWanderSmoothness().doubleValue();
+        if(data.GetMovementType() == DataDrivenParticleData.MovementType.WANDER) {
+            velocityX += random.nextBetween((int)-wanderMagnitude, (int)wanderMagnitude) / wanderSmoothness;
+            velocityY += random.nextBetween((int)-wanderMagnitude, (int)wanderMagnitude) / wanderSmoothness;
+            velocityZ += random.nextBetween((int)-wanderMagnitude, (int)wanderMagnitude) / wanderSmoothness;
         }
+
+        this.alpha = 1;
     }
 
     public static class Factory implements ParticleFactory<DefaultParticleType> {
