@@ -34,7 +34,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.function.Consumer;
 
-public class Scribe implements ModInitializer, ClientModInitializer {
+public class Scribe {
 	private static final String NAMESPACE = "scribe";
 
 	public static final Logger LOGGER = LoggerFactory.getLogger("scribe");
@@ -47,18 +47,6 @@ public class Scribe implements ModInitializer, ClientModInitializer {
 	public static Map<String, Consumer<DataDrivenParticle>> dataDrivenParticleTicks = new HashMap<String, Consumer<DataDrivenParticle>>();
 
 	public static Config config;
-
-	@Override
-	public void onInitialize() {
-		RegisterParticle(new Identifier(NAMESPACE, "test_particle"));
-	}
-
-	@Override
-	public void onInitializeClient() {
-		InitializeDataDrivenFeatures();
-
-		RegisterDataDrivenClientParticle(new Identifier(NAMESPACE, "test_particle"));
-	}
 
 	public static void InitializeDataDrivenFeatures(){
 		ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(new IdentifiableResourceReloadListener() {
