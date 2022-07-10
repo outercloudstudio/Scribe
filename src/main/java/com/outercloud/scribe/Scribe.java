@@ -30,6 +30,7 @@ import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
+import net.minecraft.item.SpawnEggItem;
 import net.minecraft.particle.DefaultParticleType;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.resource.ResourceType;
@@ -131,6 +132,14 @@ public class Scribe implements ModInitializer, ClientModInitializer {
 		FabricDefaultAttributeRegistry.register(entityType, attributes);
 
 		return GetEntity(identifier);
+	}
+
+	public static Item RegisterSpawnEgg(Identifier identifier, SpawnEggItem spawnEggItem, ItemGroup group){
+		items.put(identifier.toString(), spawnEggItem);
+
+		Registry.register(Registry.ITEM, identifier, GetItem(identifier));
+
+		return GetItem(identifier);
 	}
 
 	public static <E extends Entity> void RegisterClientEntity(Identifier identifier, EntityRendererFactory<E> entityRendererFactory){
