@@ -5,18 +5,12 @@ import com.outercloud.scribe.data.DataCache;
 import com.outercloud.scribe.data.animation.DataDrivenAnimationData;
 import com.outercloud.scribe.data.particle.DataDrivenParticle;
 import com.outercloud.scribe.data.particle.DataDrivenParticleData;
-import com.outercloud.scribe.testing.DripstoneTortoiseEntity;
-import com.outercloud.scribe.testing.DripstoneTortoiseEntityModel;
-import com.outercloud.scribe.testing.DripstoneTortoiseEntityRenderer;
-import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
-import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.fabricmc.fabric.api.particle.v1.FabricParticleTypes;
 import net.fabricmc.fabric.api.registry.OxidizableBlocksRegistry;
 import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;
@@ -47,7 +41,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.function.Consumer;
 
-public class Scribe implements ModInitializer, ClientModInitializer {
+public class Scribe {
 	public static final String NAMESPACE = "scribe";
 
 	public static final Logger LOGGER = LoggerFactory.getLogger("scribe");
@@ -62,29 +56,6 @@ public class Scribe implements ModInitializer, ClientModInitializer {
 	private static Map<String, EntityType<?>> entities = new HashMap<String, EntityType<?>>();
 
 	public static Config config;
-
-	@Override
-	public void onInitialize() {
-		InitializeDataDrivenFeatures();
-
-		RegisterEntity(
-			new Identifier(NAMESPACE, "dripstone_tortoise"),
-			FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, DripstoneTortoiseEntity::new)
-			.dimensions(EntityDimensions.fixed(1.3F, 0.8F))
-			.build(),
-			DripstoneTortoiseEntity.createDripstoneTortoiseAttributes()
-		);
-	}
-
-	@Override
-	public void onInitializeClient() {
-		RegisterClientEntity(
-			new Identifier(NAMESPACE, "dripstone_tortoise"),
-			DripstoneTortoiseEntityRenderer::new,
-			DripstoneTortoiseEntityModel.LAYER_LOCATION,
-			DripstoneTortoiseEntityModel::texturedModelData
-		);
-	}
 
 	public static void InitializeDataDrivenFeatures(){
 		ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(new IdentifiableResourceReloadListener() {
