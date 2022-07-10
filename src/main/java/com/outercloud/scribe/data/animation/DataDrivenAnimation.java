@@ -13,8 +13,8 @@ import java.util.Iterator;
 import java.util.Map;
 
 public class DataDrivenAnimation {
-    public static Animation GetAnimation(Identifier identifier){
-        DataDrivenAnimationData data = Scribe.GetDataDrivenAnimation(identifier);
+    public static Animation getAnimation(Identifier identifier){
+        DataDrivenAnimationData data = Scribe.getDataDrivenAnimation(identifier);
 
         if(!Scribe.initializedDataDrivenFeatures) Scribe.LOGGER.error("Fetched data driven animation without initializing data driven features!");
 

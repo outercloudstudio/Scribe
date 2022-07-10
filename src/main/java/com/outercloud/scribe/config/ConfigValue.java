@@ -1,7 +1,7 @@
 package com.outercloud.scribe.config;
 
 public class ConfigValue {
-    public static enum ValueType{
+    public enum ValueType{
         UNKNOWN,
         NUMBER,
         GROUP,
@@ -11,7 +11,7 @@ public class ConfigValue {
     }
 
     public Object value;
-    public ValueType valueType = ValueType.UNKNOWN;
+    public ValueType valueType;
 
     public ConfigValue(Number value){
         this.value = value;
@@ -38,31 +38,31 @@ public class ConfigValue {
         this.valueType = ValueType.BOOL;
     }
 
-    public Number GetNumberValue(){
+    public Number getNumberValue(){
         if(valueType != ValueType.NUMBER) return 0;
 
         return (Number)value;
     }
 
-    public ConfigGroup GetGroupValue(){
+    public ConfigGroup getGroupValue(){
         if(valueType != ValueType.GROUP) return null;
 
         return (ConfigGroup)value;
     }
 
-    public String GetStringValue(){
+    public String getStringValue(){
         if(valueType != ValueType.STRING) return "";
 
         return (String)value;
     }
 
-    public Boolean GetBoolValue(){
+    public Boolean getBoolValue(){
         if(valueType != ValueType.BOOL) return false;
 
         return (Boolean)value;
     }
 
-    public ConfigGroup GetArrayValue(){
+    public ConfigGroup getArrayValue(){
         if(valueType != ValueType.ARRAY) return null;
 
         return (ConfigGroup) value;

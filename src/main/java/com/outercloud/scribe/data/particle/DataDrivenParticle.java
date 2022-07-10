@@ -37,7 +37,7 @@ public class DataDrivenParticle extends AnimatedParticle {
 
         setSpriteForAge(spriteProvider);
 
-        data = Scribe.GetDataDrivenParticle(identifier);
+        data = Scribe.getDataDrivenParticle(identifier);
         maxAge = Math.round(data.GetLifetime().floatValue()) * 20;
 
         scale = data.GetScale().floatValue();
@@ -100,7 +100,7 @@ public class DataDrivenParticle extends AnimatedParticle {
                 for (int i = 0; i < amount; i++) {
                     Identifier identifier = Identifier.splitOn(data.GetSpawnOverTimeIdentifier(), ':');
 
-                    ParticleEffect particleEffect = Scribe.GetParticle(identifier);
+                    ParticleEffect particleEffect = Scribe.getParticle(identifier);
 
                     world.addParticle(particleEffect, x, y, z, 0, 0, 0);
                 }
@@ -124,7 +124,7 @@ public class DataDrivenParticle extends AnimatedParticle {
                     for (int i = 0; i < amount; i++) {
                         Identifier identifier = Identifier.splitOn(data.GetSpawnOverDistanceIdentifier(), ':');
 
-                        ParticleEffect particleEffect = Scribe.GetParticle(identifier);
+                        ParticleEffect particleEffect = Scribe.getParticle(identifier);
 
                         world.addParticle(particleEffect, x, y, z, 0, 0, 0);
                     }
@@ -136,7 +136,7 @@ public class DataDrivenParticle extends AnimatedParticle {
         }
 
         if(data.DoTick()){
-            Scribe.GetDataDrivenParticleTick(Identifier.splitOn(tickFunction, ':')).accept(this);
+            Scribe.getDataDrivenParticleTick(Identifier.splitOn(tickFunction, ':')).accept(this);
         }
 
         velocityX = virtualVelX;

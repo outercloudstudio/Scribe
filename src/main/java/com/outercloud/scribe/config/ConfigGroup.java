@@ -3,7 +3,6 @@ package com.outercloud.scribe.config;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.outercloud.scribe.Scribe;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -21,13 +20,13 @@ public class ConfigGroup {
     public ConfigGroup (JsonObject group, ConfigGroup parent){
         this.parent = parent;
 
-        if(group != null) Setup(group);
+        if(group != null) setup(group);
     }
 
     public ConfigGroup (JsonObject group, Config parentConfig){
         this.parentConfig = parentConfig;
 
-        if(group != null) Setup(group);
+        if(group != null) setup(group);
     }
 
     public ConfigGroup (JsonArray array, ConfigGroup parent){
@@ -35,7 +34,7 @@ public class ConfigGroup {
 
         this.isArray = true;
 
-        if(array != null) Setup(array);
+        if(array != null) setup(array);
     }
 
     public ConfigGroup (JsonArray array, Config parentConfig){
@@ -43,10 +42,10 @@ public class ConfigGroup {
 
         this.isArray = true;
 
-        if(array != null) Setup(array);
+        if(array != null) setup(array);
     }
 
-    private void Setup(JsonObject jsonObject){
+    private void setup(JsonObject jsonObject){
         Iterator<Map.Entry<String, JsonElement>> entries = jsonObject.entrySet().iterator();
 
         while (entries.hasNext()){
@@ -68,7 +67,7 @@ public class ConfigGroup {
         }
     }
 
-    private void Setup(JsonArray jsonArray){
+    private void setup(JsonArray jsonArray){
         Iterator<JsonElement> elements = jsonArray.iterator();
 
         int index = 0;
@@ -94,162 +93,162 @@ public class ConfigGroup {
         length = index;
     }
 
-    public boolean HasKey(String key){
+    public boolean hasKey(String key){
         return values.containsKey(key);
     }
 
-    public void Save(){
-        if(parent != null) parent.Save();
-        if(parentConfig != null) parentConfig.Save();
+    public void save(){
+        if(parent != null) parent.save();
+        if(parentConfig != null) parentConfig.save();
     }
 
 
     //Update
-    public void Update(String key, Number value){
+    public void update(String key, Number value){
         if(isArray) return;
 
-        if(HasKey(key)) {
+        if(hasKey(key)) {
             values.replace(key, new ConfigValue(value));
         }else{
             values.put(key, new ConfigValue(value));
         }
 
-        Save();
+        save();
     }
 
-    public void Update(int index, Number value){
+    public void update(int index, Number value){
         if(!isArray) return;
 
-        if(HasKey(String.valueOf(index))) {
+        if(hasKey(String.valueOf(index))) {
             values.replace(String.valueOf(index), new ConfigValue(value));
         }else{
             values.put(String.valueOf(index), new ConfigValue(value));
         }
 
-        Save();
+        save();
     }
 
-    public void Update(String key, String value){
+    public void update(String key, String value){
         if(isArray) return;
 
-        if(HasKey(key)) {
+        if(hasKey(key)) {
             values.replace(key, new ConfigValue(value));
         }else{
             values.put(key, new ConfigValue(value));
         }
 
-        Save();
+        save();
     }
 
-    public void Update(int index, String value){
+    public void update(int index, String value){
         if(!isArray) return;
 
-        if(HasKey(String.valueOf(index))) {
+        if(hasKey(String.valueOf(index))) {
             values.replace(String.valueOf(index), new ConfigValue(value));
         }else{
             values.put(String.valueOf(index), new ConfigValue(value));
         }
 
-        Save();
+        save();
     }
 
-    public void Update(String key, Boolean value){
+    public void update(String key, Boolean value){
         if(isArray) return;
 
-        if(HasKey(key)) {
+        if(hasKey(key)) {
             values.replace(key, new ConfigValue(value));
         }else{
             values.put(key, new ConfigValue(value));
         }
 
-        Save();
+        save();
     }
 
-    public void Update(int index, Boolean value){
+    public void update(int index, Boolean value){
         if(!isArray) return;
 
-        if(HasKey(String.valueOf(index))) {
+        if(hasKey(String.valueOf(index))) {
             values.replace(String.valueOf(index), new ConfigValue(value));
         }else{
             values.put(String.valueOf(index), new ConfigValue(value));
         }
 
-        Save();
+        save();
     }
 
-    public void Update(String key, ConfigGroup value){
+    public void update(String key, ConfigGroup value){
         if(isArray) return;
 
-        if(HasKey(key)) {
+        if(hasKey(key)) {
             values.replace(key, new ConfigValue(value));
         }else{
             values.put(key, new ConfigValue(value));
         }
 
-        Save();
+        save();
     }
 
-    public void Update(int index, ConfigGroup value){
+    public void update(int index, ConfigGroup value){
         if(!isArray) return;
 
-        if(HasKey(String.valueOf(index))) {
+        if(hasKey(String.valueOf(index))) {
             values.replace(String.valueOf(index), new ConfigValue(value));
         }else{
             values.put(String.valueOf(index), new ConfigValue(value));
         }
 
-        Save();
+        save();
     }
 
-    public void UpdateEmtpyGroup(String key){
+    public void updateEmtpyGroup(String key){
         if(isArray) return;
 
-        if(HasKey(key)) {
+        if(hasKey(key)) {
             values.replace(key, new ConfigValue(new ConfigGroup((JsonObject)null, this)));
         }else{
             values.put(key, new ConfigValue(new ConfigGroup((JsonObject)null, this)));
         }
 
-        Save();
+        save();
     }
 
-    public void UpdateEmtpyArray(String key){
+    public void updateEmtpyArray(String key){
         if(isArray) return;
 
-        if(HasKey(key)) {
+        if(hasKey(key)) {
             values.replace(key, new ConfigValue(new ConfigGroup((JsonArray)null, this)));
         }else{
             values.put(key, new ConfigValue(new ConfigGroup((JsonArray)null, this)));
         }
 
-        Save();
+        save();
     }
 
-    public void UpdateEmtpyGroup(int index){
+    public void updateEmtpyGroup(int index){
         if(!isArray) return;
 
-        if(HasKey(String.valueOf(index))) {
+        if(hasKey(String.valueOf(index))) {
             values.replace(String.valueOf(index), new ConfigValue(new ConfigGroup((JsonObject)null, this)));
         }else{
             values.put(String.valueOf(index), new ConfigValue(new ConfigGroup((JsonObject)null, this)));
         }
 
-        Save();
+        save();
     }
 
-    public void UpdateEmtpyArray(int index){
-        if(HasKey(String.valueOf(index))) {
+    public void updateEmtpyArray(int index){
+        if(hasKey(String.valueOf(index))) {
             values.replace(String.valueOf(index), new ConfigValue(new ConfigGroup((JsonArray)null, this)));
         }else{
             values.put(String.valueOf(index), new ConfigValue(new ConfigGroup((JsonArray)null, this)));
         }
 
-        Save();
+        save();
     }
 
 
     //Insert
-    public void Insert(int index, Number value){
+    public void insert(int index, Number value){
         if(!isArray) return;
 
         for (int i = index; i < length; i++) {
@@ -261,10 +260,10 @@ public class ConfigGroup {
 
         length++;
 
-        Save();
+        save();
     }
 
-    public void Insert(int index, String value){
+    public void insert(int index, String value){
         if(!isArray) return;
 
         for (int i = index; i < length; i++) {
@@ -276,10 +275,10 @@ public class ConfigGroup {
 
         length++;
 
-        Save();
+        save();
     }
 
-    public void Insert(int index, Boolean value){
+    public void insert(int index, Boolean value){
         if(!isArray) return;
 
         for (int i = index; i < length; i++) {
@@ -291,10 +290,10 @@ public class ConfigGroup {
 
         length++;
 
-        Save();
+        save();
     }
 
-    public void Insert(int index, ConfigGroup value){
+    public void insert(int index, ConfigGroup value){
         if(!isArray) return;
 
         for (int i = index; i < length; i++) {
@@ -306,10 +305,10 @@ public class ConfigGroup {
 
         length++;
 
-        Save();
+        save();
     }
 
-    public void InsertEmptyGroup(int index){
+    public void insertEmptyGroup(int index){
         if(!isArray) return;
 
         for (int i = index; i < length; i++) {
@@ -321,10 +320,10 @@ public class ConfigGroup {
 
         length++;
 
-        Save();
+        save();
     }
 
-    public void InsertEmptyArray(int index){
+    public void insertEmptyArray(int index){
         if(!isArray) return;
 
         for (int i = index; i < length; i++) {
@@ -336,209 +335,208 @@ public class ConfigGroup {
 
         length++;
 
-        Save();
+        save();
     }
 
 
     //Default
-    public void Default(String key, Number value){
+    public void setDefault(String key, Number value){
         if(isArray) return;
 
-        if(HasKey(key)) return;
+        if(hasKey(key)) return;
 
         values.put(key, new ConfigValue(value));
 
-        Save();
+        save();
     }
 
-    public void Default(int index, Number value){
+    public void setDefault(int index, Number value){
         if(!isArray) return;
 
         if(index > length) return;
 
         if(index == length) length++;
 
-        if(HasKey(String.valueOf(index))) return;
+        if(hasKey(String.valueOf(index))) return;
 
         values.put(String.valueOf(index), new ConfigValue(value));
 
-        Save();
+        save();
     }
 
-    public void Default(String key, String value){
+    public void setDefault(String key, String value){
         if(isArray) return;
 
-        if(HasKey(key)) return;
+        if(hasKey(key)) return;
 
         values.put(key, new ConfigValue(value));
 
-        Save();
+        save();
     }
 
-    public void Default(int index, String value){
+    public void setDefault(int index, String value){
         if(!isArray) return;
 
         if(index > length) return;
 
         if(index == length) length++;
 
-        if(HasKey(String.valueOf(index))) return;
+        if(hasKey(String.valueOf(index))) return;
 
         values.put(String.valueOf(index), new ConfigValue(value));
 
-        Save();
+        save();
     }
 
-    public void Default(String key, Boolean value){
+    public void setDefault(String key, Boolean value){
         if(isArray) return;
 
-        if(HasKey(key)) return;
+        if(hasKey(key)) return;
 
         values.put(key, new ConfigValue(value));
 
-        Save();
+        save();
     }
 
-    public void Default(int index, Boolean value){
+    public void setDefault(int index, Boolean value){
         if(!isArray) return;
 
         if(index > length) return;
 
         if(index == length) length++;
 
-        if(HasKey(String.valueOf(index))) return;
+        if(hasKey(String.valueOf(index))) return;
 
         values.put(String.valueOf(index), new ConfigValue(value));
 
-        Save();
+        save();
     }
 
-    public void Default(String key, ConfigGroup value){
+    public void setDefault(String key, ConfigGroup value){
         if(isArray) return;
 
-        if(HasKey(key)) return;
+        if(hasKey(key)) return;
 
         values.put(key, new ConfigValue(value));
 
-        Save();
+        save();
     }
 
-    public void Default(int index, ConfigGroup value){
+    public void setDefault(int index, ConfigGroup value){
         if(!isArray) return;
 
         if(index > length) return;
 
         if(index == length) length++;
 
-        if(HasKey(String.valueOf(index))) return;
+        if(hasKey(String.valueOf(index))) return;
 
         values.put(String.valueOf(index), new ConfigValue(value));
 
-        Save();
+        save();
     }
 
-    public void DefaultEmptyGroup(String key){
+    public void setDefaultEmptyGroup(String key){
         if(isArray) return;
 
-        if(HasKey(key)) return;
+        if(hasKey(key)) return;
 
         values.put(key, new ConfigValue(new ConfigGroup((JsonObject)null, this)));
 
-        Save();
+        save();
     }
 
-    public void DefaultEmptyGroup(int index){
+    public void setDefaultEmptyGroup(int index){
         if(!isArray) return;
 
-        if(HasKey(String.valueOf(index))) return;
+        if(hasKey(String.valueOf(index))) return;
 
         values.put(String.valueOf(index), new ConfigValue(new ConfigGroup((JsonObject)null, this)));
 
-        Save();
+        save();
     }
 
-    public void DefaultEmptyArray(String key){
+    public void setDefaultEmptyArray(String key){
         if(isArray) return;
 
-        if(HasKey(key)) return;
+        if(hasKey(key)) return;
 
         values.put(key, new ConfigValue(new ConfigGroup((JsonArray)null, this)));
 
-        Save();
+        save();
     }
 
-    public void DefaultEmptyArray(int index){
+    public void setDefaultEmptyArray(int index){
         if(isArray) return;
 
-        if(HasKey(String.valueOf(index))) return;
+        if(hasKey(String.valueOf(index))) return;
 
         values.put(String.valueOf(index), new ConfigValue(new ConfigGroup((JsonArray)null, this)));
 
-        Save();
+        save();
     }
 
 
     //Add
-    public void Add(Number value){
+    public void add(Number value){
         if(!isArray) return;
 
         values.put(String.valueOf(length), new ConfigValue(value));
 
-        Save();
+        save();
     }
 
-    public void Add(String value){
+    public void add(String value){
         if(!isArray) return;
 
         values.put(String.valueOf(length), new ConfigValue(value));
 
-        Save();
+        save();
     }
 
-    public void Add(Boolean value){
+    public void add(Boolean value){
         if(!isArray) return;
 
         values.put(String.valueOf(length), new ConfigValue(value));
 
-        Save();
+        save();
     }
 
-    public void AddEmtpyGroup(){
+    public void add(ConfigGroup value){
+        if(!isArray) return;
+
+        values.put(String.valueOf(length), new ConfigValue(value));
+
+        save();
+    }
+
+    public void addEmtpyGroup(){
         if(isArray) return;
 
         values.put(String.valueOf(length), new ConfigValue(new ConfigGroup((JsonObject)null, this)));
 
-        Save();
+        save();
     }
 
-    public void AddEmtpyArray(){
+    public void addEmtpyArray(){
         if(isArray) return;
 
         values.put(String.valueOf(length), new ConfigValue(new ConfigGroup((JsonArray) null, this)));
 
-        Save();
+        save();
     }
-
-    public void Add(ConfigGroup value){
-        if(!isArray) return;
-
-        values.put(String.valueOf(length), new ConfigValue(value));
-
-        Save();
-    }
-
 
     //Remove
-    public void Remove(String key){
-        if(!HasKey(key)) return;
+    public void remove(String key){
+        if(!hasKey(key)) return;
 
         values.remove(key);
 
-        Save();
+        save();
     }
 
-    public void Remove(int index){
-        if(!HasKey(String.valueOf(index))) return;
+    public void remove(int index){
+        if(!hasKey(String.valueOf(index))) return;
 
         values.remove(String.valueOf(index));
 
@@ -549,85 +547,85 @@ public class ConfigGroup {
 
         length--;
 
-        Save();
+        save();
     }
 
 
     //Get
-    public ConfigValue Get(String key){
+    public ConfigValue get(String key){
         if(!values.containsKey(key)) return null;
 
         return values.get(key);
     }
 
-    public ConfigValue Get(int index){
+    public ConfigValue get(int index){
         if(!values.containsKey(String.valueOf(index))) return null;
 
         return values.get(String.valueOf(index));
     }
 
-    public Number GetNumber(String key){
+    public Number getNumber(String key){
         if(!values.containsKey(key)) return 0;
 
-        return values.get(key).GetNumberValue();
+        return values.get(key).getNumberValue();
     }
 
-    public Number GetNumber(int index){
+    public Number getNumber(int index){
         if(!values.containsKey(String.valueOf(index))) return 0;
 
-        return values.get(String.valueOf(index)).GetNumberValue();
+        return values.get(String.valueOf(index)).getNumberValue();
     }
 
-    public String GetString(String key){
+    public String getString(String key){
         if(!values.containsKey(key)) return "";
 
-        return values.get(key).GetStringValue();
+        return values.get(key).getStringValue();
     }
 
-    public String GetString(int index){
+    public String getString(int index){
         if(!values.containsKey(String.valueOf(index))) return "";
 
-        return values.get(String.valueOf(index)).GetStringValue();
+        return values.get(String.valueOf(index)).getStringValue();
     }
 
-    public Boolean GetBool(String key){
+    public Boolean getBool(String key){
         if(!values.containsKey(key)) return false;
 
-        return values.get(key).GetBoolValue();
+        return values.get(key).getBoolValue();
     }
 
-    public Boolean GetBool(int index){
+    public Boolean getBool(int index){
         if(!values.containsKey(String.valueOf(index))) return false;
 
-        return values.get(String.valueOf(index)).GetBoolValue();
+        return values.get(String.valueOf(index)).getBoolValue();
     }
 
-    public ConfigGroup GetGroup(String key){
+    public ConfigGroup getGroup(String key){
         if(!values.containsKey(key)) return null;
 
-        return values.get(key).GetGroupValue();
+        return values.get(key).getGroupValue();
     }
 
-    public ConfigGroup GetGroup(int index){
+    public ConfigGroup getGroup(int index){
         if(!values.containsKey(String.valueOf(index))) return null;
 
-        return values.get(String.valueOf(index)).GetGroupValue();
+        return values.get(String.valueOf(index)).getGroupValue();
     }
 
-    public ConfigGroup GetArray(String key){
+    public ConfigGroup getArray(String key){
         if(!values.containsKey(key)) return null;
 
-        return values.get(key).GetArrayValue();
+        return values.get(key).getArrayValue();
     }
 
-    public ConfigGroup GetArray(int index){
+    public ConfigGroup getArray(int index){
         if(!values.containsKey(String.valueOf(index))) return null;
 
-        return values.get(String.valueOf(index)).GetArrayValue();
+        return values.get(String.valueOf(index)).getArrayValue();
     }
 
 
-    public JsonElement ToJson(){
+    public JsonElement toJson(){
         if (!isArray) {
             JsonObject jsonObject = new JsonObject();
 
@@ -639,15 +637,15 @@ public class ConfigGroup {
                 ConfigValue value = entry.getValue();
 
                 if (value.valueType == ConfigValue.ValueType.GROUP){
-                    jsonObject.add(entry.getKey(), value.GetGroupValue().ToJson());
+                    jsonObject.add(entry.getKey(), value.getGroupValue().toJson());
                 } else if (value.valueType == ConfigValue.ValueType.NUMBER) {
-                    jsonObject.addProperty(entry.getKey(), value.GetNumberValue());
+                    jsonObject.addProperty(entry.getKey(), value.getNumberValue());
                 } else if (value.valueType == ConfigValue.ValueType.ARRAY) {
-                    jsonObject.add(entry.getKey(), value.GetArrayValue().ToJson());
+                    jsonObject.add(entry.getKey(), value.getArrayValue().toJson());
                 } else if (value.valueType == ConfigValue.ValueType.STRING) {
-                    jsonObject.addProperty(entry.getKey(), value.GetStringValue());
+                    jsonObject.addProperty(entry.getKey(), value.getStringValue());
                 } else if (value.valueType == ConfigValue.ValueType.BOOL) {
-                    jsonObject.addProperty(entry.getKey(), value.GetBoolValue());
+                    jsonObject.addProperty(entry.getKey(), value.getBoolValue());
                 }
             }
 
@@ -659,15 +657,15 @@ public class ConfigGroup {
                 ConfigValue value = values.get(String.valueOf(i));
 
                 if (value.valueType == ConfigValue.ValueType.GROUP){
-                    jsonArray.add(value.GetGroupValue().ToJson());
+                    jsonArray.add(value.getGroupValue().toJson());
                 } else if (value.valueType == ConfigValue.ValueType.NUMBER) {
-                    jsonArray.add(value.GetNumberValue());
+                    jsonArray.add(value.getNumberValue());
                 } else if (value.valueType == ConfigValue.ValueType.ARRAY) {
-                    jsonArray.add(value.GetArrayValue().ToJson());
+                    jsonArray.add(value.getArrayValue().toJson());
                 } else if (value.valueType == ConfigValue.ValueType.STRING) {
-                    jsonArray.add(value.GetStringValue());
+                    jsonArray.add(value.getStringValue());
                 } else if (value.valueType == ConfigValue.ValueType.BOOL) {
-                    jsonArray.add(value.GetBoolValue());
+                    jsonArray.add(value.getBoolValue());
                 }
             }
 

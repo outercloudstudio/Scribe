@@ -1,7 +1,6 @@
 package com.outercloud.scribe.config;
 
 import com.google.gson.*;
-import com.outercloud.scribe.Scribe;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -13,7 +12,7 @@ public class Config {
     public ConfigGroup masterGroup;
     public String filePath;
 
-    public void Load(String relativePath){
+    public void load(String relativePath){
         try {
             Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
@@ -45,10 +44,10 @@ public class Config {
         }
     }
 
-    public void Save(){
+    public void save(){
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
-        JsonElement jsonElement = masterGroup.ToJson();
+        JsonElement jsonElement = masterGroup.toJson();
 
         try {
             if(!Files.exists(Paths.get("./config/" + filePath))){
@@ -65,219 +64,219 @@ public class Config {
         }
     }
 
-    public boolean HasKey(String key){
-        return masterGroup.HasKey(key);
+    public boolean hasKey(String key){
+        return masterGroup.hasKey(key);
     }
 
 
     //Update
-    public void Update(String key, Number value){
-        masterGroup.Update(key, value);
+    public void update(String key, Number value){
+        masterGroup.update(key, value);
     }
 
-    public void Update(int index, Number value){
-        masterGroup.Update(index, value);
+    public void update(int index, Number value){
+        masterGroup.update(index, value);
     }
 
-    public void Update(String key, String value){
-        masterGroup.Update(key, value);
+    public void update(String key, String value){
+        masterGroup.update(key, value);
     }
 
-    public void Update(int index, String value){
-        masterGroup.Update(index, value);
+    public void update(int index, String value){
+        masterGroup.update(index, value);
     }
 
-    public void Update(String key, Boolean value){
-        masterGroup.Update(key, value);
+    public void update(String key, Boolean value){
+        masterGroup.update(key, value);
     }
 
-    public void Update(int index, Boolean value){
-        masterGroup.Update(index, value);
+    public void update(int index, Boolean value){
+        masterGroup.update(index, value);
     }
 
-    public void Update(String key, ConfigGroup value){
-        masterGroup.Update(key, value);
+    public void update(String key, ConfigGroup value){
+        masterGroup.update(key, value);
     }
 
-    public void Update(int index, ConfigGroup value){
-        masterGroup.Update(index, value);
+    public void update(int index, ConfigGroup value){
+        masterGroup.update(index, value);
     }
 
-    public void UpdateEmtpyGroup(String key){
-        masterGroup.UpdateEmtpyGroup(key);
+    public void updateEmtpyGroup(String key){
+        masterGroup.updateEmtpyGroup(key);
     }
 
     public void UpdateEmtpyArray(String key){
-        masterGroup.UpdateEmtpyArray(key);
+        masterGroup.updateEmtpyArray(key);
     }
 
-    public void UpdateEmtpyGroup(int index){
-        masterGroup.UpdateEmtpyGroup(index);
+    public void updateEmtpyGroup(int index){
+        masterGroup.updateEmtpyGroup(index);
     }
 
     public void UpdateEmtpyArray(int index){
-        masterGroup.UpdateEmtpyArray(index);
+        masterGroup.updateEmtpyArray(index);
     }
 
 
     //Insert
-    public void Insert(int index, Number value){
-        masterGroup.Insert(index, value);
+    public void insert(int index, Number value){
+        masterGroup.insert(index, value);
     }
 
-    public void Insert(int index, String value){
-        masterGroup.Insert(index, value);
+    public void insert(int index, String value){
+        masterGroup.insert(index, value);
     }
 
-    public void Insert(int index, Boolean value){
-        masterGroup.Insert(index, value);
+    public void insert(int index, Boolean value){
+        masterGroup.insert(index, value);
     }
 
-    public void Insert(int index, ConfigGroup value){
-        masterGroup.Insert(index, value);
+    public void insert(int index, ConfigGroup value){
+        masterGroup.insert(index, value);
     }
 
-    public void InsertEmptyGroup(int index){
-        masterGroup.InsertEmptyGroup(index);
+    public void insertEmptyGroup(int index){
+        masterGroup.insertEmptyGroup(index);
     }
 
-    public void InsertEmptyArray(int index){
-        masterGroup.InsertEmptyArray(index);
+    public void insertEmptyArray(int index){
+        masterGroup.insertEmptyArray(index);
     }
 
 
     //Default
-    public void Default(String key, Number value){
-        masterGroup.Default(key, value);
+    public void setDefault(String key, Number value){
+        masterGroup.setDefault(key, value);
     }
 
-    public void Default(int index, Number value){
-        masterGroup.Default(index, value);
+    public void setDefault(int index, Number value){
+        masterGroup.setDefault(index, value);
     }
 
-    public void Default(String key, String value){
-        masterGroup.Default(key, value);
+    public void setDefault(String key, String value){
+        masterGroup.setDefault(key, value);
     }
 
-    public void Default(int index, String value){
-        masterGroup.Default(index, value);
+    public void setDefault(int index, String value){
+        masterGroup.setDefault(index, value);
     }
 
-    public void Default(String key, Boolean value){
-        masterGroup.Default(key, value);
+    public void setDefault(String key, Boolean value){
+        masterGroup.setDefault(key, value);
     }
 
-    public void Default(int index, Boolean value){
-        masterGroup.Default(index, value);
+    public void setDefault(int index, Boolean value){
+        masterGroup.setDefault(index, value);
     }
 
-    public void Default(String key, ConfigGroup value){
-        masterGroup.Default(key, value);
+    public void setDefault(String key, ConfigGroup value){
+        masterGroup.setDefault(key, value);
     }
 
-    public void Default(int index, ConfigGroup value){
-        masterGroup.Default(index, value);
+    public void setDefault(int index, ConfigGroup value){
+        masterGroup.setDefault(index, value);
     }
 
-    public void DefaultEmptyGroup(String key){
-        masterGroup.DefaultEmptyGroup(key);
+    public void setDefaultEmptyGroup(String key){
+        masterGroup.setDefaultEmptyGroup(key);
     }
 
-    public void DefaultEmptyGroup(int index){
-        masterGroup.DefaultEmptyGroup(index);
+    public void setDefaultEmptyGroup(int index){
+        masterGroup.setDefaultEmptyGroup(index);
     }
 
-    public void DefaultEmptyArray(String key){
-        masterGroup.DefaultEmptyArray(key);
+    public void setDefaultEmptyArray(String key){
+        masterGroup.setDefaultEmptyArray(key);
     }
 
-    public void DefaultEmptyArray(int index){
-        masterGroup.DefaultEmptyArray(index);
+    public void setDefaultEmptyArray(int index){
+        masterGroup.setDefaultEmptyArray(index);
     }
 
 
     //Add
-    public void Add(Number value){
-        masterGroup.Add(value);
+    public void add(Number value){
+        masterGroup.add(value);
     }
 
-    public void Add(String value){
-        masterGroup.Add(value);
+    public void add(String value){
+        masterGroup.add(value);
     }
 
-    public void Add(Boolean value){
-        masterGroup.Add(value);
+    public void add(Boolean value){
+        masterGroup.add(value);
     }
 
-    public void AddEmtpyGroup(){
-        masterGroup.AddEmtpyGroup();
+    public void add(ConfigGroup value){
+        masterGroup.add(value);
     }
 
-    public void AddEmtpyArray(){
-       masterGroup.AddEmtpyGroup();
+    public void addEmtpyGroup(){
+        masterGroup.addEmtpyGroup();
     }
 
-    public void Add(ConfigGroup value){
-        masterGroup.Add(value);
+    public void addEmtpyArray(){
+       masterGroup.addEmtpyGroup();
     }
 
 
     //Remove
-    public void Remove(String key){
-        masterGroup.Remove(key);
+    public void remove(String key){
+        masterGroup.remove(key);
     }
 
-    public void Remove(int index){
-        masterGroup.Remove(index);
+    public void remove(int index){
+        masterGroup.remove(index);
     }
 
 
     //Get
-    public ConfigValue Get(String key){
-        return masterGroup.Get(key);
+    public ConfigValue get(String key){
+        return masterGroup.get(key);
     }
 
-    public ConfigValue Get(int index){
-        return masterGroup.Get(index);
+    public ConfigValue get(int index){
+        return masterGroup.get(index);
     }
 
-    public Number GetNumber(String key){
-        return masterGroup.GetNumber(key);
+    public Number getNumber(String key){
+        return masterGroup.getNumber(key);
     }
 
-    public Number GetNumber(int index){
-        return masterGroup.GetNumber(index);
+    public Number getNumber(int index){
+        return masterGroup.getNumber(index);
     }
 
-    public String GetString(String key){
-        return masterGroup.GetString(key);
+    public String getString(String key){
+        return masterGroup.getString(key);
     }
 
-    public String GetString(int index){
-        return masterGroup.GetString(index);
+    public String getString(int index){
+        return masterGroup.getString(index);
     }
 
-    public Boolean GetBool(String key){
-        return masterGroup.GetBool(key);
+    public Boolean getBool(String key){
+        return masterGroup.getBool(key);
     }
 
-    public Boolean GetBool(int index){
-        return masterGroup.GetBool(index);
+    public Boolean getBool(int index){
+        return masterGroup.getBool(index);
     }
 
-    public ConfigGroup GetGroup(String key){
-        return masterGroup.GetGroup(key);
+    public ConfigGroup getGroup(String key){
+        return masterGroup.getGroup(key);
     }
 
-    public ConfigGroup GetGroup(int index){
-        return masterGroup.GetGroup(index);
+    public ConfigGroup getGroup(int index){
+        return masterGroup.getGroup(index);
     }
 
-    public ConfigGroup GetArray(String key){
-        return masterGroup.GetArray(key);
+    public ConfigGroup getArray(String key){
+        return masterGroup.getArray(key);
     }
 
-    public ConfigGroup GetArray(int index){
-        return masterGroup.GetArray(index);
+    public ConfigGroup getArray(int index){
+        return masterGroup.getArray(index);
     }
 }

@@ -59,7 +59,9 @@ public class Scribe {
 
 	public static boolean initializedDataDrivenFeatures = false;
 
-	public static void InitializeDataDrivenFeatures(){
+	public static void initializeDataDrivenFeatures(){
+		Scribe.LOGGER.info("Let's build something great together! \uD83D\uDE80");
+
 		if(initializedDataDrivenFeatures){
 			Scribe.LOGGER.warn("Scribe data driven features already initialized!");
 
@@ -91,166 +93,166 @@ public class Scribe {
 	}
 
 	//Config
-	public static void LoadConfig(String relativePath){
+	public static void loadConfig(String relativePath){
 		config = new Config();
-		config.Load(relativePath);
+		config.load(relativePath);
 	}
 
 	//Items
-	public static Item GetItem(Identifier identifier){
+	public static Item getItem(Identifier identifier){
 		return items.get(identifier.toString());
 	}
 
-	public static Item RegisterItem(Identifier identifier, Item item, ItemGroup group){
+	public static Item registerItem(Identifier identifier, Item item, ItemGroup group){
 		items.put(identifier.toString(), item);
 
-		Registry.register(Registry.ITEM, identifier, GetItem(identifier));
+		Registry.register(Registry.ITEM, identifier, getItem(identifier));
 
-		return GetItem(identifier);
+		return getItem(identifier);
 	}
 
 	//Entities
-	public static EntityType<?> GetEntity(Identifier identifier){
+	public static EntityType<?> getEntity(Identifier identifier){
 		return entities.get(identifier.toString());
 	}
 
-	public static DataDrivenAnimationData GetDataDrivenAnimation(Identifier identifier){
+	public static DataDrivenAnimationData getDataDrivenAnimation(Identifier identifier){
 		return dataDrivenAnimations.get(identifier);
 	}
 
-	public static EntityType RegisterEntity(Identifier identifier, EntityType<?> entityType){
+	public static EntityType registerEntity(Identifier identifier, EntityType<?> entityType){
 		entities.put(identifier.toString(), entityType);
 
 		Registry.register(Registry.ENTITY_TYPE, identifier, entityType);
 
-		return GetEntity(identifier);
+		return getEntity(identifier);
 	}
 
-	public static EntityType RegisterEntity(Identifier identifier, EntityType<? extends LivingEntity> entityType, DefaultAttributeContainer.Builder attributes){
+	public static EntityType registerEntity(Identifier identifier, EntityType<? extends LivingEntity> entityType, DefaultAttributeContainer.Builder attributes){
 		entities.put(identifier.toString(), entityType);
 
 		Registry.register(Registry.ENTITY_TYPE, identifier, entityType);
 
 		FabricDefaultAttributeRegistry.register(entityType, attributes);
 
-		return GetEntity(identifier);
+		return getEntity(identifier);
 	}
 
-	public static Item RegisterSpawnEgg(Identifier identifier, SpawnEggItem spawnEggItem, ItemGroup group){
+	public static Item registerSpawnEgg(Identifier identifier, SpawnEggItem spawnEggItem, ItemGroup group){
 		items.put(identifier.toString(), spawnEggItem);
 
-		Registry.register(Registry.ITEM, identifier, GetItem(identifier));
+		Registry.register(Registry.ITEM, identifier, getItem(identifier));
 
-		return GetItem(identifier);
+		return getItem(identifier);
 	}
 
-	public static <E extends Entity> void RegisterClientEntity(Identifier identifier, EntityRendererFactory<E> entityRendererFactory){
-		EntityRendererRegistry.register((EntityType<? extends E>) GetEntity(identifier), entityRendererFactory);
+	public static <E extends Entity> void registerClientEntity(Identifier identifier, EntityRendererFactory<E> entityRendererFactory){
+		EntityRendererRegistry.register((EntityType<? extends E>) getEntity(identifier), entityRendererFactory);
 	}
 
-	public static <E extends Entity> void RegisterClientEntity(Identifier identifier, EntityRendererFactory<E> entityRendererFactory, EntityModelLayer layer, EntityModelLayerRegistry.TexturedModelDataProvider texturedModelDataProvider){
-		EntityRendererRegistry.register((EntityType<? extends E>) GetEntity(identifier), entityRendererFactory);
+	public static <E extends Entity> void registerClientEntity(Identifier identifier, EntityRendererFactory<E> entityRendererFactory, EntityModelLayer layer, EntityModelLayerRegistry.TexturedModelDataProvider texturedModelDataProvider){
+		EntityRendererRegistry.register((EntityType<? extends E>) getEntity(identifier), entityRendererFactory);
 
 		EntityModelLayerRegistry.registerModelLayer(layer, texturedModelDataProvider);
 	}
 
 	//Blocks
-	public static Block GetBlock(Identifier identifier){
+	public static Block getBlock(Identifier identifier){
 		return blocks.get(identifier.toString());
 	}
 
-	public static BlockEntityType<?> GetBlockEntity(Identifier identifier){
+	public static BlockEntityType<?> getBlockEntity(Identifier identifier){
 		return blockEntities.get(identifier.toString());
 	}
 
-	public static Block RegisterBlock(Identifier identifier, Block block){
+	public static Block registerBlock(Identifier identifier, Block block){
 		blocks.put(identifier.toString(), block);
 
-		Registry.register(Registry.BLOCK, identifier, GetBlock(identifier));
+		Registry.register(Registry.BLOCK, identifier, getBlock(identifier));
 
 		return block;
 	}
 
-	public static Block RegisterBlockWithItem(Identifier identifier, Block block, ItemGroup group){
+	public static Block registerBlockWithItem(Identifier identifier, Block block, ItemGroup group){
 		blocks.put(identifier.toString(), block);
 
-		Registry.register(Registry.BLOCK, identifier, GetBlock(identifier));
+		Registry.register(Registry.BLOCK, identifier, getBlock(identifier));
 
-		items.put(identifier.toString(), new BlockItem(GetBlock(identifier), new Item.Settings().group(group)));
+		items.put(identifier.toString(), new BlockItem(getBlock(identifier), new Item.Settings().group(group)));
 
-		Registry.register(Registry.ITEM, identifier, GetItem(identifier));
+		Registry.register(Registry.ITEM, identifier, getItem(identifier));
 
-		return GetBlock(identifier);
+		return getBlock(identifier);
 	}
 
-	public static Block RegisterBlockWithItem(Identifier identifier, Identifier itemIdentifier, Block block, ItemGroup group){
+	public static Block registerBlockWithItem(Identifier identifier, Identifier itemIdentifier, Block block, ItemGroup group){
 		blocks.put(identifier.toString(), block);
 
-		Registry.register(Registry.BLOCK, identifier, GetBlock(identifier));
+		Registry.register(Registry.BLOCK, identifier, getBlock(identifier));
 
-		items.put(itemIdentifier.toString(), new BlockItem(GetBlock(identifier), new Item.Settings().group(group)));
+		items.put(itemIdentifier.toString(), new BlockItem(getBlock(identifier), new Item.Settings().group(group)));
 
-		Registry.register(Registry.ITEM, itemIdentifier, GetItem(itemIdentifier));
+		Registry.register(Registry.ITEM, itemIdentifier, getItem(itemIdentifier));
 
-		return GetBlock(identifier);
+		return getBlock(identifier);
 	}
 
-	public static void RegisterBlockLayer(Identifier identifier, RenderLayer layer){
-		BlockRenderLayerMap.INSTANCE.putBlock(GetBlock(identifier), RenderLayer.getCutout());
+	public static void registerBlockLayer(Identifier identifier, RenderLayer layer){
+		BlockRenderLayerMap.INSTANCE.putBlock(getBlock(identifier), RenderLayer.getCutout());
 	}
 
-	public static BlockEntityType<?> RegisterBlockEntity(Identifier identifier, FabricBlockEntityTypeBuilder.Factory blockEntity, Identifier ... blocks){
+	public static BlockEntityType<?> registerBlockEntity(Identifier identifier, FabricBlockEntityTypeBuilder.Factory blockEntity, Identifier ... blocks){
 		Block[] blockClasses = new Block[blocks.length];
 
 		for (int i = 0; i < blocks.length; i++) {
-			blockClasses[i] = GetBlock(blocks[i]);
+			blockClasses[i] = getBlock(blocks[i]);
 		}
 
 		blockEntities.put(identifier.toString(), Registry.register(Registry.BLOCK_ENTITY_TYPE, identifier,  FabricBlockEntityTypeBuilder.create(blockEntity, blockClasses).build(null)));
 
-		return GetBlockEntity(identifier);
+		return getBlockEntity(identifier);
 	}
 
-	public static void RegisterOxidizablePair(Identifier from, Identifier to){
-		OxidizableBlocksRegistry.registerOxidizableBlockPair(GetBlock(from), GetBlock(to));
+	public static void registerOxidizablePair(Identifier from, Identifier to){
+		OxidizableBlocksRegistry.registerOxidizableBlockPair(getBlock(from), getBlock(to));
 	}
 
-	public static void RegisterWaxablePair(Identifier from, Identifier to){
-		OxidizableBlocksRegistry.registerWaxableBlockPair(GetBlock(from), GetBlock(to));
+	public static void registerWaxablePair(Identifier from, Identifier to){
+		OxidizableBlocksRegistry.registerWaxableBlockPair(getBlock(from), getBlock(to));
 	}
 
 	//Particles
-	public static DefaultParticleType GetParticle(Identifier identifier){
+	public static DefaultParticleType getParticle(Identifier identifier){
 		return particles.get(identifier.toString());
 	}
 
-	public static DataDrivenParticleData GetDataDrivenParticle(Identifier identifier){
+	public static DataDrivenParticleData getDataDrivenParticle(Identifier identifier){
 		return dataDrivenParticles.get(identifier);
 	}
 
-	public static Consumer<DataDrivenParticle> GetDataDrivenParticleTick(Identifier identifier){
+	public static Consumer<DataDrivenParticle> getDataDrivenParticleTick(Identifier identifier){
 		return dataDrivenParticleTicks.get(identifier.toString());
 	}
 
-	public static DefaultParticleType RegisterParticle(Identifier identifier){
+	public static DefaultParticleType registerParticle(Identifier identifier){
 		particles.put(identifier.toString(), FabricParticleTypes.simple());
 
-		Registry.register(Registry.PARTICLE_TYPE, identifier, GetParticle(identifier));
+		Registry.register(Registry.PARTICLE_TYPE, identifier, getParticle(identifier));
 
-		return GetParticle(identifier);
+		return getParticle(identifier);
 	}
 
-	public static void RegisterClientParticle(Identifier identifier,  ParticleFactoryRegistry.PendingParticleFactory factory){
-		ParticleFactoryRegistry.getInstance().register(GetParticle(identifier), factory);
+	public static void registerClientParticle(Identifier identifier, ParticleFactoryRegistry.PendingParticleFactory factory){
+		ParticleFactoryRegistry.getInstance().register(getParticle(identifier), factory);
 	}
 
-	public static void RegisterDataDrivenClientParticle(Identifier identifier){
+	public static void registerDataDrivenClientParticle(Identifier identifier){
 		if(!initializedDataDrivenFeatures) Scribe.LOGGER.error("Registered data driven client particle without initializing data driven features!");
 
-		ParticleFactoryRegistry.getInstance().register(GetParticle(identifier), DataDrivenParticle.Factory::new);
+		ParticleFactoryRegistry.getInstance().register(getParticle(identifier), DataDrivenParticle.Factory::new);
 	}
 
-	public static void RegisterDataDrivenClientParticleTick(Identifier identifier, Consumer<DataDrivenParticle> tick){
+	public static void registerDataDrivenClientParticleTick(Identifier identifier, Consumer<DataDrivenParticle> tick){
 		if(!initializedDataDrivenFeatures) Scribe.LOGGER.error("Registered data driven client particle without initializing data driven features!");
 
 		dataDrivenParticleTicks.put(identifier.toString(), tick);
