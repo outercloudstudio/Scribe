@@ -159,5 +159,7 @@ public class DataDrivenAnimationData extends DataDrivenData {
                 return ReadFloat(keyframeObject.get("vector").getAsJsonArray().get(2));
             }
         }
+
+        return 0;
     }
 }
