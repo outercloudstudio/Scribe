@@ -25,6 +25,7 @@ public class DataLoader {
 
             return new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
         } catch (Exception e) {
+            Scribe.LOGGER.error("There was an error loading resource file " + identifier.toString());
             Scribe.LOGGER.error(String.valueOf(e));
 
             return null;

@@ -57,7 +57,17 @@ public class Scribe {
 
 	public static Config config;
 
+	private static boolean initiliazedDataDrivenFeatures = false;
+
 	public static void InitializeDataDrivenFeatures(){
+		if(initiliazedDataDrivenFeatures){
+			Scribe.LOGGER.warn("Scribe data driven features already initialized!");
+
+			return;
+		};
+
+		initiliazedDataDrivenFeatures = true;
+
 		ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(new IdentifiableResourceReloadListener() {
 			@Override
 			public Identifier getFabricId() {

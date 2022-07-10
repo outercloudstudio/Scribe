@@ -119,8 +119,6 @@ public class DataDrivenParticle extends AnimatedParticle {
                 while (distanceTillNewParticleSpawn <= 0) {
                     distanceTillNewParticleSpawn += targetDistanceTillNewParticleSpawn;
 
-                    Scribe.LOGGER.info("SPAWN!");
-
                     int amount = data.GetSpawnOverDistanceAmount();
 
                     for (int i = 0; i < amount; i++) {

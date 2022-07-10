@@ -655,12 +655,8 @@ public class ConfigGroup {
         }else {
             JsonArray jsonArray = new JsonArray();
 
-            Scribe.LOGGER.info("To json returning array!");
-
             for (int i = 0; i < length; i++) {
                 ConfigValue value = values.get(String.valueOf(i));
-
-                Scribe.LOGGER.info(String.valueOf(value.valueType));
 
                 if (value.valueType == ConfigValue.ValueType.GROUP){
                     jsonArray.add(value.GetGroupValue().ToJson());

@@ -51,6 +51,8 @@ public class DataDrivenAnimation {
                         vec = AnimationHelper.method_41829(x, y, z);
                     } else if(operationEntry.getKey().equals("scale")){
                         vec = AnimationHelper.method_41822(x, y, z);
+                    } else{
+                        Scribe.LOGGER.warn("Unknown operation " + operationEntry.getKey() + " of bone " + boneEntry.getKey() + " in animation " + identifier.toString());
                     }
 
                     if(interpolationType == DataDrivenAnimationData.InterpolationType.LINEAR){
@@ -69,7 +71,7 @@ public class DataDrivenAnimation {
                 } else if(operationEntry.getKey().equals("scale")){
                     builder.addBoneAnimation(boneEntry.getKey(), new Transformation(Transformation.Targets.SCALE, keyframes));
                 } else{
-                    Scribe.LOGGER.warn("Unknown operation in animation " + operationEntry.getKey());
+                    Scribe.LOGGER.warn("Unknown operation " + operationEntry.getKey() + " of bone " + boneEntry.getKey() + " in animation " + identifier.toString());
                 }
             }
         }
