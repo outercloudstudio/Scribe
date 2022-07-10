@@ -1,4 +1,4 @@
-package com.outercloud.scribe.data;
+package com.outercloud.scribe.data.particle;
 
 import com.outercloud.scribe.Scribe;
 import net.minecraft.client.particle.AnimatedParticle;
@@ -13,12 +13,12 @@ import net.minecraft.util.math.Vec3f;
 import net.minecraft.util.registry.Registry;
 
 public class DataDrivenParticle extends AnimatedParticle {
-    DataDrivenParticleData data;
+    public DataDrivenParticleData data;
 
     float wanderMagnitude;
     float wanderSmoothness;
 
-    float virtualAlpha;
+    public float virtualAlpha;
 
     float timeTillNewParticleSpawn;
 
@@ -26,11 +26,11 @@ public class DataDrivenParticle extends AnimatedParticle {
     float targetDistanceTillNewParticleSpawn;
     Vec3f lastParticlePos;
 
-    String tickFunction;
+    public String tickFunction;
 
-    float virtualVelX;
-    float virtualVelY;
-    float virtualVelZ;
+    public float virtualVelX;
+    public float virtualVelY;
+    public float virtualVelZ;
 
     DataDrivenParticle(ClientWorld world, double x, double y, double z, SpriteProvider spriteProvider, Identifier identifier) {
         super(world, x, y, z, spriteProvider, 0.0F);

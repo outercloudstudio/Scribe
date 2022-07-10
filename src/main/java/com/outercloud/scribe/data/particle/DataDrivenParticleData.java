@@ -1,6 +1,7 @@
-package com.outercloud.scribe.data;
+package com.outercloud.scribe.data.particle;
 
 import com.google.gson.JsonElement;
+import com.outercloud.scribe.data.DataDrivenData;
 
 public class DataDrivenParticleData extends DataDrivenData {
     public enum MovementType {

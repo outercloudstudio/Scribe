@@ -2,8 +2,12 @@ package com.outercloud.scribe;
 
 import com.outercloud.scribe.config.Config;
 import com.outercloud.scribe.data.DataCache;
-import com.outercloud.scribe.data.DataDrivenParticle;
-import com.outercloud.scribe.data.DataDrivenParticleData;
+import com.outercloud.scribe.data.animation.DataDrivenAnimationData;
+import com.outercloud.scribe.data.particle.DataDrivenParticle;
+import com.outercloud.scribe.data.particle.DataDrivenParticleData;
+import com.outercloud.scribe.testing.DripstoneTortoiseEntity;
+import com.outercloud.scribe.testing.DripstoneTortoiseEntityModel;
+import com.outercloud.scribe.testing.DripstoneTortoiseEntityRenderer;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
@@ -12,20 +16,17 @@ import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
+import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.fabricmc.fabric.api.particle.v1.FabricParticleTypes;
 import net.fabricmc.fabric.api.registry.OxidizableBlocksRegistry;
 import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.client.model.TexturedModelData;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.entity.EntityRendererFactory;
-import net.minecraft.client.render.entity.model.EntityModel;
 import net.minecraft.client.render.entity.model.EntityModelLayer;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.*;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
@@ -47,7 +48,7 @@ import java.util.concurrent.Executor;
 import java.util.function.Consumer;
 
 public class Scribe implements ModInitializer, ClientModInitializer {
-	private static final String NAMESPACE = "scribe";
+	public static final String NAMESPACE = "scribe";
 
 	public static final Logger LOGGER = LoggerFactory.getLogger("scribe");
 
@@ -56,6 +57,7 @@ public class Scribe implements ModInitializer, ClientModInitializer {
 	private static Map<String, Item> items = new HashMap<String, Item>();
 	private static Map<String, DefaultParticleType> particles = new HashMap<String, DefaultParticleType>();
 	public static Map<Identifier, DataDrivenParticleData> dataDrivenParticles = new HashMap<Identifier, DataDrivenParticleData>();
+	public static Map<Identifier, DataDrivenAnimationData> dataDrivenAnimations = new HashMap<Identifier, DataDrivenAnimationData>();
 	public static Map<String, Consumer<DataDrivenParticle>> dataDrivenParticleTicks = new HashMap<String, Consumer<DataDrivenParticle>>();
 	private static Map<String, EntityType<?>> entities = new HashMap<String, EntityType<?>>();
 
@@ -63,12 +65,25 @@ public class Scribe implements ModInitializer, ClientModInitializer {
 
 	@Override
 	public void onInitialize() {
+		InitializeDataDrivenFeatures();
 
+		RegisterEntity(
+			new Identifier(NAMESPACE, "dripstone_tortoise"),
+			FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, DripstoneTortoiseEntity::new)
+			.dimensions(EntityDimensions.fixed(1.3F, 0.8F))
+			.build(),
+			DripstoneTortoiseEntity.createDripstoneTortoiseAttributes()
+		);
 	}
 
 	@Override
 	public void onInitializeClient() {
-
+		RegisterClientEntity(
+			new Identifier(NAMESPACE, "dripstone_tortoise"),
+			DripstoneTortoiseEntityRenderer::new,
+			DripstoneTortoiseEntityModel.LAYER_LOCATION,
+			DripstoneTortoiseEntityModel::texturedModelData
+		);
 	}
 
 	public static void InitializeDataDrivenFeatures(){
@@ -114,6 +129,10 @@ public class Scribe implements ModInitializer, ClientModInitializer {
 	//Entities
 	public static EntityType<?> GetEntity(Identifier identifier){
 		return entities.get(identifier.toString());
+	}
+
+	public static DataDrivenAnimationData GetDataDrivenAnimation(Identifier identifier){
+		return dataDrivenAnimations.get(identifier);
 	}
 
 	public static EntityType RegisterEntity(Identifier identifier, EntityType<?> entityType){

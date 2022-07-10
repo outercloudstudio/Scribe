@@ -10,6 +10,8 @@ import java.util.function.BiConsumer;
 import java.util.function.Function;
 
 import com.outercloud.scribe.Scribe;
+import com.outercloud.scribe.data.animation.DataDrivenAnimationData;
+import com.outercloud.scribe.data.particle.DataDrivenParticleData;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.resource.ResourceReloader;
 import net.minecraft.util.Identifier;
@@ -24,22 +26,32 @@ public class DataCache {
             Executor gameExecutor
     ) {
         Map<Identifier, DataDrivenParticleData> particlesLoaded = new HashMap<>();
+        Map<Identifier, DataDrivenAnimationData> animationsLoaded = new HashMap<>();
 
         return CompletableFuture.allOf(
                 loadResources(
                         backgroundExecutor,
                         resourceManager,
                         "data_driven_particle",
-                        resource -> ParticleLoader.load(resourceManager, resource),
+                        resource -> DataLoader.loadParticle(resourceManager, resource),
                         particlesLoaded::put
+                ),
+                loadResources(
+                        backgroundExecutor,
+                        resourceManager,
+                        "data_driven_animation",
+                        resource -> DataLoader.loadAnimation(resourceManager, resource),
+                        animationsLoaded::put
                 )
         ).thenCompose(stage::whenPrepared).thenAcceptAsync(empty -> {
             Map<Identifier, DataDrivenParticleData> particlesRemapped = new HashMap<>();
+            Map<Identifier, DataDrivenAnimationData> animationsRemapped = new HashMap<>();
 
-            Iterator<Entry<Identifier, DataDrivenParticleData>> iterator = particlesLoaded.entrySet().iterator();
+            Iterator<Entry<Identifier, DataDrivenParticleData>> particleIterator = particlesLoaded.entrySet().iterator();
+            Iterator<Entry<Identifier, DataDrivenAnimationData>> animationIterator = animationsLoaded.entrySet().iterator();
 
-            while(iterator.hasNext()){
-                Entry<Identifier, DataDrivenParticleData> entry = iterator.next();
+            while(particleIterator.hasNext()){
+                Entry<Identifier, DataDrivenParticleData> entry = particleIterator.next();
 
                 Identifier identifier = entry.getKey();
 
@@ -48,7 +60,18 @@ public class DataCache {
                 particlesRemapped.put(remappedIdentifier, entry.getValue());
             }
 
+            while(animationIterator.hasNext()){
+                Entry<Identifier, DataDrivenAnimationData> entry = animationIterator.next();
+
+                Identifier identifier = entry.getKey();
+
+                Identifier remappedIdentifier = new Identifier(identifier.getNamespace(), identifier.getPath().substring(22, identifier.getPath().length() - 5));
+
+                animationsRemapped.put(remappedIdentifier, entry.getValue());
+            }
+
             Scribe.dataDrivenParticles = particlesRemapped;
+            Scribe.dataDrivenAnimations = animationsRemapped;
         }, gameExecutor);
     }
 
