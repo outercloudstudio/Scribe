@@ -34,14 +34,14 @@ public class DataCache {
                 loadResources(
                         backgroundExecutor,
                         resourceManager,
-                        "data_driven_particle",
+                        "data_driven_particles",
                         resource -> DataLoader.loadParticle(resourceManager, resource),
                         particlesLoaded::put
                 ),
                 loadResources(
                         backgroundExecutor,
                         resourceManager,
-                        "data_driven_animation",
+                        "data_driven_animations",
                         resource -> DataLoader.loadAnimation(resourceManager, resource),
                         animationsLoaded::put
                 )
@@ -57,7 +57,7 @@ public class DataCache {
 
                 Identifier identifier = entry.getKey();
 
-                Identifier remappedIdentifier = new Identifier(identifier.getNamespace(), identifier.getPath().substring(21, identifier.getPath().length() - 5));
+                Identifier remappedIdentifier = new Identifier(identifier.getNamespace(), identifier.getPath().substring(22, identifier.getPath().length() - 5));
 
                 Scribe.LOGGER.info("Mapped particle " + identifier + " to " + remappedIdentifier);
 
@@ -69,7 +69,7 @@ public class DataCache {
 
                 Identifier identifier = entry.getKey();
 
-                Identifier remappedIdentifier = new Identifier(identifier.getNamespace(), identifier.getPath().substring(22, identifier.getPath().length() - 5));
+                Identifier remappedIdentifier = new Identifier(identifier.getNamespace(), identifier.getPath().substring(23, identifier.getPath().length() - 5));
 
                 Scribe.LOGGER.info("Mapped animation " + identifier + " to " + remappedIdentifier);
 
