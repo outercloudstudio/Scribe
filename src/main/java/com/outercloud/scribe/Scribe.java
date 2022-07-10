@@ -57,10 +57,10 @@ public class Scribe {
 
 	public static Config config;
 
-	private static boolean initiliazedDataDrivenFeatures = false;
+	public static boolean initializedDataDrivenFeatures = false;
 
 	public static void InitializeDataDrivenFeatures(){
-		if(initiliazedDataDrivenFeatures){
+		if(initializedDataDrivenFeatures){
 			Scribe.LOGGER.warn("Scribe data driven features already initialized!");
 
 			return;
@@ -68,7 +68,7 @@ public class Scribe {
 
 		Scribe.LOGGER.info("Scribe data driven features initialized!");
 
-		initiliazedDataDrivenFeatures = true;
+		initializedDataDrivenFeatures = true;
 
 		ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(new IdentifiableResourceReloadListener() {
 			@Override
@@ -245,10 +245,14 @@ public class Scribe {
 	}
 
 	public static void RegisterDataDrivenClientParticle(Identifier identifier){
+		if(!initializedDataDrivenFeatures) Scribe.LOGGER.error("Registered data driven client particle without initializing data driven features!");
+
 		ParticleFactoryRegistry.getInstance().register(GetParticle(identifier), DataDrivenParticle.Factory::new);
 	}
 
 	public static void RegisterDataDrivenClientParticleTick(Identifier identifier, Consumer<DataDrivenParticle> tick){
+		if(!initializedDataDrivenFeatures) Scribe.LOGGER.error("Registered data driven client particle without initializing data driven features!");
+
 		dataDrivenParticleTicks.put(identifier.toString(), tick);
 	}
 }

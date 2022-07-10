@@ -16,6 +16,10 @@ public class DataDrivenAnimation {
     public static Animation GetAnimation(Identifier identifier){
         DataDrivenAnimationData data = Scribe.GetDataDrivenAnimation(identifier);
 
+        if(!Scribe.initializedDataDrivenFeatures) Scribe.LOGGER.error("Fetched data driven animation without initializing data driven features!");
+
+        if(data == null) Scribe.LOGGER.error("Data driven animation " + identifier + " does not exist!");
+
         Animation.Builder builder = Animation.Builder.create(data.GetLength());
 
         Iterator<Map.Entry<String, JsonElement>> boneIterator = data.GetBones();
