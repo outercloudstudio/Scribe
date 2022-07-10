@@ -76,6 +76,8 @@ public class DataDrivenAnimation {
             }
         }
 
+        if(data.GetLooping()) builder.looping();
+
         return builder.build();
     }
 }

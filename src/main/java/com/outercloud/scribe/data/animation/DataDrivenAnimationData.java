@@ -1,6 +1,7 @@
 package com.outercloud.scribe.data.animation;
 
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.outercloud.scribe.data.DataDrivenData;
 
 import java.util.Iterator;
@@ -22,6 +23,14 @@ public class DataDrivenAnimationData extends DataDrivenData {
         if(!data.getAsJsonObject().has("length")) return 1F;
 
         return ReadFloat(data.getAsJsonObject().get("length"));
+    }
+
+    public Boolean GetLooping(){
+        if(!data.isJsonObject()) return false;
+
+        if(!data.getAsJsonObject().has("looping")) return false;
+
+        return ReadBool(data.getAsJsonObject().get("looping"));
     }
 
     public Iterator<Map.Entry<String, JsonElement>> GetBones(){
@@ -135,8 +144,20 @@ public class DataDrivenAnimationData extends DataDrivenData {
 
         if(!data.getAsJsonObject().get("bones").getAsJsonObject().get(bone).getAsJsonObject().get(operation).getAsJsonObject().get(keyframe).isJsonObject()) return 0F;
 
-        if(!data.getAsJsonObject().get("bones").getAsJsonObject().get(bone).getAsJsonObject().get(operation).getAsJsonObject().get(keyframe).getAsJsonObject().has(coord)) return 0F;
+        JsonObject keyframeObject = data.getAsJsonObject().get("bones").getAsJsonObject().get(bone).getAsJsonObject().get(operation).getAsJsonObject().get(keyframe).getAsJsonObject();
 
-        return ReadFloat(data.getAsJsonObject().get("bones").getAsJsonObject().get(bone).getAsJsonObject().get(operation).getAsJsonObject().get(keyframe).getAsJsonObject().get(coord));
+        if(!keyframeObject.has(coord) && keyframeObject.has("vector") && keyframeObject.get("vector").isJsonArray() && keyframeObject.get("vector").getAsJsonArray().size() != 3) return 0F;
+
+        if(keyframeObject.has(coord)){
+            return ReadFloat(keyframeObject.get(coord));
+        } else{
+            if(coord == "x"){
+                return ReadFloat(keyframeObject.get("vector").getAsJsonArray().get(0));
+            } else if(coord == "y"){
+                return ReadFloat(keyframeObject.get("vector").getAsJsonArray().get(1));
+            } else if(coord == "z"){
+                return ReadFloat(keyframeObject.get("vector").getAsJsonArray().get(2));
+            }
+        }
     }
 }
