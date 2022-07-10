@@ -66,6 +66,8 @@ public class Scribe {
 			return;
 		};
 
+		Scribe.LOGGER.info("Scribe data driven features initialized!");
+
 		initiliazedDataDrivenFeatures = true;
 
 		ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(new IdentifiableResourceReloadListener() {
@@ -211,6 +213,10 @@ public class Scribe {
 
 	public static void RegisterOxidizablePair(Identifier from, Identifier to){
 		OxidizableBlocksRegistry.registerOxidizableBlockPair(GetBlock(from), GetBlock(to));
+	}
+
+	public static void RegisterWaxablePair(Identifier from, Identifier to){
+		OxidizableBlocksRegistry.registerWaxableBlockPair(GetBlock(from), GetBlock(to));
 	}
 
 	//Particles

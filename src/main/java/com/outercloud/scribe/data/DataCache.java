@@ -25,6 +25,8 @@ public class DataCache {
             Executor backgroundExecutor,
             Executor gameExecutor
     ) {
+        Scribe.LOGGER.info("Scribe data cache reloading!");
+
         Map<Identifier, DataDrivenParticleData> particlesLoaded = new HashMap<>();
         Map<Identifier, DataDrivenAnimationData> animationsLoaded = new HashMap<>();
 
@@ -57,6 +59,8 @@ public class DataCache {
 
                 Identifier remappedIdentifier = new Identifier(identifier.getNamespace(), identifier.getPath().substring(21, identifier.getPath().length() - 5));
 
+                Scribe.LOGGER.info("Mapped particle " + identifier + " to " + remappedIdentifier);
+
                 particlesRemapped.put(remappedIdentifier, entry.getValue());
             }
 
@@ -66,6 +70,8 @@ public class DataCache {
                 Identifier identifier = entry.getKey();
 
                 Identifier remappedIdentifier = new Identifier(identifier.getNamespace(), identifier.getPath().substring(22, identifier.getPath().length() - 5));
+
+                Scribe.LOGGER.info("Mapped animation " + identifier + " to " + remappedIdentifier);
 
                 animationsRemapped.put(remappedIdentifier, entry.getValue());
             }
