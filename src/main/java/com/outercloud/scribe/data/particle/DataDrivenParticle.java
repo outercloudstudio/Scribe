@@ -38,7 +38,7 @@ public class DataDrivenParticle extends AnimatedParticle {
         setSpriteForAge(spriteProvider);
 
         data = Scribe.getDataDrivenParticle(identifier);
-        maxAge = Math.round(data.GetLifetime().floatValue()) * 20;
+        maxAge = Math.round(data.GetLifetime().floatValue());
 
         scale = data.GetScale().floatValue();
 

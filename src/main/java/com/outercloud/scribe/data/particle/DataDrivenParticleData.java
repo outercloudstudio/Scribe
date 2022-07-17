@@ -26,9 +26,13 @@ public class DataDrivenParticleData extends DataDrivenData {
     public Number GetLifetime(){
         if(!data.isJsonObject()) return 1;
 
-        if(!data.getAsJsonObject().has("lifetime")) return 1;
+        if(data.getAsJsonObject().has("lifetime")){
+            return ReadFloat(data.getAsJsonObject().get("lifetime")) * 20;
+        }else if(data.getAsJsonObject().has("lifetime_tick")){
+            return ReadFloat(data.getAsJsonObject().get("lifetime_tick"));
+        }
 
-        return ReadFloat(data.getAsJsonObject().get("lifetime"));
+        return 1;
     }
 
     public MovementType GetMovementType(){
