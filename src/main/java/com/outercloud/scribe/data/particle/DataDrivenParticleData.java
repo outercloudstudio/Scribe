@@ -35,6 +35,14 @@ public class DataDrivenParticleData extends DataDrivenData {
         return 1;
     }
 
+    public Boolean GetHasLighting(){
+        if(!data.isJsonObject()) return true;
+
+        if(!data.getAsJsonObject().has("has_lighting")) return true;
+
+        return ReadBool(data.getAsJsonObject().get("has_lighting"));
+    }
+
     public MovementType GetMovementType(){
         if(!data.isJsonObject()) return MovementType.NONE;
 

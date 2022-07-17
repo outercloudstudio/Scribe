@@ -5,10 +5,12 @@ import net.minecraft.client.particle.AnimatedParticle;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleFactory;
 import net.minecraft.client.particle.SpriteProvider;
+import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.particle.DefaultParticleType;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3f;
 import net.minecraft.util.registry.Registry;
 
@@ -67,6 +69,15 @@ public class DataDrivenParticle extends AnimatedParticle {
         }
 
         if(data.DoTick()) tickFunction = data.GetTick();
+    }
+
+    @Override
+    public int getBrightness(float tint) {
+        int i = super.getBrightness(tint);
+
+        if(!data.GetHasLighting()) return i;
+
+        return i == 0 && world.isChunkLoaded(new BlockPos(x, y, z)) ? WorldRenderer.getLightmapCoordinates(world, new BlockPos(x, y, z)) : i;
     }
 
     @Override
