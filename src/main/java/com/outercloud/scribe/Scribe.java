@@ -263,10 +263,12 @@ public class Scribe implements ModInitializer, ClientModInitializer {
 	@Override
 	public void onInitializeClient() {
 		initializeDataDrivenFeatures();
+
+		registerDataDrivenClientParticle(new Identifier(NAMESPACE, "test_particle"));
 	}
 
 	@Override
 	public void onInitialize() {
-
+		registerParticle(new Identifier(NAMESPACE, "test_particle"));
 	}
 }
