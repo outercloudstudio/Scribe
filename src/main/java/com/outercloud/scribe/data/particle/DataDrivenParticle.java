@@ -74,7 +74,7 @@ public class DataDrivenParticle extends AnimatedParticle {
     @Override
     public int getBrightness(float tint) {
         int i = super.getBrightness(tint);
-        
+
         if(!data.GetHasLighting()) return i;
 
         return world.isChunkLoaded(new BlockPos(x, y, z)) ? WorldRenderer.getLightmapCoordinates(world, new BlockPos(x, y, z)) : i;

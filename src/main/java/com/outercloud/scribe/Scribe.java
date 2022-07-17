@@ -43,7 +43,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.function.Consumer;
 
-public class Scribe implements ModInitializer, ClientModInitializer {
+public class Scribe {
 	public static final String NAMESPACE = "scribe";
 
 	public static final Logger LOGGER = LoggerFactory.getLogger("scribe");
@@ -258,17 +258,5 @@ public class Scribe implements ModInitializer, ClientModInitializer {
 		if(!initializedDataDrivenFeatures) Scribe.LOGGER.error("Registered data driven client particle without initializing data driven features!");
 
 		dataDrivenParticleTicks.put(identifier.toString(), tick);
-	}
-
-	@Override
-	public void onInitializeClient() {
-		initializeDataDrivenFeatures();
-
-		registerDataDrivenClientParticle(new Identifier(NAMESPACE, "test_particle"));
-	}
-
-	@Override
-	public void onInitialize() {
-		registerParticle(new Identifier(NAMESPACE, "test_particle"));
 	}
 }
