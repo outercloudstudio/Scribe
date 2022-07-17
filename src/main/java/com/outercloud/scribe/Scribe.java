@@ -5,6 +5,8 @@ import com.outercloud.scribe.data.DataCache;
 import com.outercloud.scribe.data.animation.DataDrivenAnimationData;
 import com.outercloud.scribe.data.particle.DataDrivenParticle;
 import com.outercloud.scribe.data.particle.DataDrivenParticleData;
+import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
@@ -41,7 +43,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.function.Consumer;
 
-public class Scribe {
+public class Scribe implements ModInitializer, ClientModInitializer {
 	public static final String NAMESPACE = "scribe";
 
 	public static final Logger LOGGER = LoggerFactory.getLogger("scribe");
@@ -256,5 +258,15 @@ public class Scribe {
 		if(!initializedDataDrivenFeatures) Scribe.LOGGER.error("Registered data driven client particle without initializing data driven features!");
 
 		dataDrivenParticleTicks.put(identifier.toString(), tick);
+	}
+
+	@Override
+	public void onInitializeClient() {
+		initializeDataDrivenFeatures();
+	}
+
+	@Override
+	public void onInitialize() {
+
 	}
 }
